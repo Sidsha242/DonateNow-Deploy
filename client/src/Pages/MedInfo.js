@@ -8,7 +8,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import Axios from 'axios';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const MedInfo = () => {
     const [bldgrp, setBldGrp] = useState(''); 
