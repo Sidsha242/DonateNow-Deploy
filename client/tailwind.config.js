@@ -11,6 +11,7 @@ module.exports = {
     "./src/Pages/Feed.js",
     "./src/Pages/Dashboard.js",
     "./src/Pages/Admin.js",
+    "./src/Components/NewDrive.js",
   ],
   theme: {
     extend: {
