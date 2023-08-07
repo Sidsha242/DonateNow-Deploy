@@ -3,10 +3,30 @@ const express = require("express");
 const router = express.Router()
 jwt = require('jsonwebtoken'),
 bcrypt = require('bcrypt')
+const config = require("../config");
 require("dotenv").config();
 
 const User = require("../models/userModel");
 const MedInfo = require ("../models/medInfoModel");
+
+const client=require('twilio')(config.accountSID,config.authToken)
+router.get('/login',(req,res)=>{
+    client.verify.v2.services(config.serviceID).verifications.create({
+        to:`+${req.query.phonenumber}`,
+        channel:`${req.query.channel}`
+    }).then((data)=>{
+        res.status(200).send(data)
+    })
+})
+
+router.get('/verify',(req,res)=>{
+    client.verify.v2.services(config.serviceID).verificationChecks.create({
+        to:`+${req.query.phonenumber}`,
+        code:`${req.query.code}`
+    }).then((data)=>{
+        res.status(200).send(data)
+    })
+})
 
 
 router.post("/register" , async (req, res) => {
