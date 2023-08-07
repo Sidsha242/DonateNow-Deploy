@@ -25,12 +25,21 @@ const Register = () => {
                 localStorage.setItem("user", JSON.stringify(response.data.result));
               
                 console.log('User added');
-                 setTimeout(() => {
-                     window.location.href = '/phoneotp';
-                 }, 1000)
+                //  setTimeout(() => {
+                //      window.location.href = '/medinfo';
+                //  }, 1000)
             }
         });
     };
+
+    const sendOTP = () => {
+        Axios.get('http://localhost:3031/user/login?phonenumber=919909926646&channel=sms').then((response) => {
+            console.log(response);
+            setTimeout(() => {
+                window.location.href = '/phoneotp';
+            }, 1000) 
+        })  
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -66,7 +75,7 @@ const Register = () => {
                         <input type="text" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" 
                         required id="phonenumReg" name="phoennumReg" value={phonenumReg} onChange={(e) => setPhoneNumReg(e.target.value)} />
                     </div>
-                    <button type="submit" className="w-full text-white bg-emerald-400 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2.5 py-2.5 text-center" onClick={register}>Sign Up</button>
+                    <button type="submit" className="w-full text-white bg-emerald-400 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2.5 py-2.5 text-center" onClick={()=>{ sendOTP(); register();}}>Sign Up</button>
                 </form>
             <h2 className='font-bold text-lg'>{messageReg}</h2>
         </div>
