@@ -34,7 +34,7 @@ const PhoneOTP = () => {
           <p>Phone Verification</p>
         </div>
         <div class="flex flex-row text-sm font-medium text-gray-400">
-          <p>We have sent a code to your phone number [phonenumber]</p>
+          <p>We have sent a code to your phone number 93*****822</p>
         </div>
       </div>
 
