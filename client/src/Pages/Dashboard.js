@@ -36,8 +36,8 @@ const Dashboard = () => {
                 <div className='grid grid-cols-2 p-6 space-y-4 mt-10'>
                 <div>
                 <h1 className='text-xl font-bold'>Blood Donated:</h1>
-                <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
-                <div class="bg-red-600 h-2.5 rounded-full dark:bg-red-500" style={{width: "45%"}}></div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                <div class="bg-red-600 h-2.5 rounded-full" style={{width: "45%"}}></div>
                 </div>
                 </div>
                 <div className='bg-[#F2EEDB] shadow w-min p-5 rounded-xl mx-auto'>
