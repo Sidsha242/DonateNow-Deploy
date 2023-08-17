@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import Axios from 'axios';
 import React from 'react';
+
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import OTPInput from "react-otp-input"
 import './StyledVerify.css'
+
+import axios from '../axios';
 
 const Register = () => {
 
@@ -16,7 +18,7 @@ const Register = () => {
     const [phonenumReg, setPhoneNumReg] = useState('');
 
     const register = () => {
-        Axios.post('http://localhost:3031/user/register', {
+        axios.post('/user/register', {
             username: usernameReg, 
             email : emailReg,                             
             password: passwordReg,
@@ -41,13 +43,14 @@ const Register = () => {
 
     const sendOTP = () => {
         try{
-            Axios.get('http://localhost:3031/user/login?phonenumber='+phonenumReg+'&channel=sms').then((response) => {
+            axios.get('/user/login?phonenumber='+phonenumReg+'&channel=sms').then((response) => {
                 console.log(response);
                 setTimeout(() => {
                 }, 1000)
             })  
         }catch(err){
             console.log(err);
+            setMessageReg("Error with OTP");
         } 
     }
 
@@ -58,7 +61,7 @@ const Register = () => {
     }
     const verify = () => {
         try{
-            Axios.get('http://localhost:3031/user/verify?phonenumber=' + phonenumReg + '&code=' + OTP).then((response) => {
+            axios.get('/user/verify?phonenumber=' + phonenumReg + '&code=' + OTP).then((response) => {
                 console.log(OTP);
                 console.log(response);
                 if(response.data.status === 'approved'){
@@ -100,7 +103,7 @@ const Register = () => {
 
   return (
     <>
-    <div className='bg-[#F2EEDB] pt-10 pb-10'>
+    <div className='pt-10 pb-10'>
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
             <div className='w-full bg-[#E3DEC6] rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0'>
                 <div className='p-6 space-y-4 md:space-y-6 sm:p-8'>

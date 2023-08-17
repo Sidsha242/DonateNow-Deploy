@@ -12,6 +12,10 @@ module.exports = {
     "./src/Pages/Dashboard.js",
     "./src/Pages/Admin.js",
     "./src/Components/NewDrive.js",
+    "./src/Pages/Layout.js",
+    "./src/Pages/Unauthorized.js",
+    "./src/Components/FeedCard.js",
+    "./src/Pages/LinkPage.js"
   ],
   theme: {
     extend: {

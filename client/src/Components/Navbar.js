@@ -1,17 +1,27 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from "react";
 import { Transition } from "@headlessui/react";
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import useAuth from '../Hooks/useAuth';
 
+import { Link } from 'react-router-dom';
 
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 
 
 const Navbar = () => {
-    const [loginStatus, setloginStatus] = useState(false);
-    const items = localStorage.getItem('user');
-    console.log(items);
+    const [isloggedIn, setLoggedIn] = useState(false);
+    const { auth } = useAuth();
+
+    useEffect(()=>{
+        if(auth.email)
+        {
+            setLoggedIn(true);
+            console.log(isloggedIn);
+        }
+    },[])
+   
+
     const [isOpen, setIsOpen] = useState(false);
     return (
         <div>
@@ -26,30 +36,21 @@ const Navbar = () => {
                             </div>
                             <div className="hidden md:block">
                                 <div className="ml-10 flex items-baseline space-x-4">
-
-                                    <Link to="/about">
-                                        <a
-                                            href="#"
-                                            className="text-[#F2EEDB] hover:bg-[#FA9884] hover:text-white px-3 py-2 rounded-md text-lg font-semibold"
-                                        >
+                                    <Link to="/about" className="text-[#F2EEDB] hover:bg-[#FA9884] hover:text-white px-3 py-2 rounded-md text-lg font-semibold">
                                             About
-                                        </a>
                                     </Link>
-                                    <Link to="/dashboard">
-                                        <a
-                                            href="#"
-                                            className="text-[#F2EEDB] hover:bg-[#FA9884] hover:text-white px-3 py-2 rounded-md text-lg font-semibold"
-                                        >
+                                    <Link to="/dashboard" className="text-[#F2EEDB] hover:bg-[#FA9884] hover:text-white px-3 py-2 rounded-md text-lg font-semibold">
                                             Donate
-                                        </a>
                                     </Link>
-                                    {!loginStatus &&
-                                        <Link to="/login">
-                                            <button class="text-[#F2EEDB] hover:bg-[#FA9884] text-white font-bold py-2 px-4 rounded">
-                                                Log In
-                                            </button>
-                                        </Link>
-                                    }
+                                    <Link to="/admin" className="text-[#F2EEDB] hover:bg-[#FA9884] hover:text-white px-3 py-2 rounded-md text-lg font-semibold">
+                                            Admin
+                                    </Link>
+                                    {isloggedIn ? <Link to="/logout" className="text-[#F2EEDB] hover:bg-[#FA9884] text-white font-bold py-2 px-4 rounded">
+                                                Log Out
+                                    </Link> :
+                                     <Link to="/login" className="text-[#F2EEDB] hover:bg-[#FA9884] text-white font-bold py-2 px-4 rounded">
+                                     Log In
+                                     </Link> }
                                      <Link to="/feed">
                                        <NotificationsIcon />
                                     </Link>
@@ -115,36 +116,18 @@ const Navbar = () => {
                     {(ref) => (
                         <div className="md:hidden" id="mobile-menu">
                             <div ref={ref} className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                                <Link to="/explore">
-                                    <a
-                                        href="#"
-                                        className="text-[#F2EEDB] hover:bg-[#FA9884] hover:text-white px-3 py-2 rounded-md text-lg font-semibold"
-                                    >
-                                       About
-                                    </a>
-                                </Link>
-                                <Link to="/dashboard">
-                                    <a
-                                        href="#"
-                                        className="text-[#F2EEDB] hover:bg-[#FA9884] hover:text-white px-3 py-2 rounded-md text-lg font-semibold"
-                                    >
-                                        Donate
-                                    </a>
-                                </Link>
-                                {!loginStatus &&
-                                    <Link to="/login">
-                                        <button className=" text-[#F2EEDB] hover:bg-[#FA9884] text-white font-bold py-2 px-4 rounded">
-                                            Log In
-                                        </button>
+                                    <Link to="/about" className="text-[#F2EEDB] hover:bg-[#FA9884] hover:text-white px-3 py-2 rounded-md text-lg font-semibold">
+                                            About
                                     </Link>
-                                }
-                                {loginStatus &&
-                                    <Link to="/">
-                                        <button className=" bg-[#FF0000] hover:bg-red-200 text-white font-bold py-2 px-4 rounded">
-                                            Log Out
-                                        </button>
+                                    <Link to="/dashboard" className="text-[#F2EEDB] hover:bg-[#FA9884] hover:text-white px-3 py-2 rounded-md text-lg font-semibold">
+                                            Donate
                                     </Link>
-                                }
+                                    <Link to="/login" className="text-[#F2EEDB] hover:bg-[#FA9884] text-white font-bold py-2 px-4 rounded">
+                                                Log In
+                                    </Link>
+                                     <Link to="/feed">
+                                       <NotificationsIcon />
+                                    </Link>
                             </div>
                         </div>
                     )}

@@ -30,7 +30,6 @@ router.get('/verify',(req,res)=>{
 
 
 router.post("/register" , async (req, res) => {
-    console.log('Inside route');
   var newUser = new User({
     username: req.body.username,
     email: req.body.email,
@@ -61,10 +60,11 @@ router.post("/sign_in" , async (req, res) => {
                      const token = jwt.sign({ id }, process.env.JWT_KEY, {
                          expiresIn: 300,
                      })
-                     console.log(user._id);
+                     //console.log(user._id);
+                     console.log(user?.role);
+                     const role = user?.role;
                     
-
-                     res.json({ auth: true, token: token, result: user, message: "Login Successful" });   //user is autheraized therefore creaying token
+                     res.json({ auth: true, token: token, result: user, roles: role, message: "Login Successful" });   //user is autheraized therefore creating token
                 }
                  else {
                      res.json({ auth: false, message: "wrong username/password combination" });

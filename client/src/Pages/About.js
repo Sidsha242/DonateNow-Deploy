@@ -4,7 +4,7 @@ import React from 'react'
 
 const About = () => {
   return (
-    <div>About</div>
+    <div>Hi we are DonateNow</div>
   )
 }
 

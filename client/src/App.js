@@ -1,35 +1,63 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import {BrowserRouter , Routes, Route} from 'react-router-dom';
+
 import Login from './Pages/Login';
 import Register from './Pages/Register';
 import Home from './Pages/Home';
-import Navbar from './Components/Navbar';
 import Feed from './Pages/Feed';
 import Dashboard from './Pages/Dashboard';
 import Admin from './Pages/Admin';
 import MedInfo from './Pages/MedInfo';
 import PhoneOTP from './Pages/PhoneOTP';
 import About from './Pages/About';
+import Layout from './Pages/Layout';
+import Missing from './Pages/Missing';
+import Unauthorized from './Pages/Unauthorized';
+
+import { AuthProvider } from './Context/AuthProvider';
+import RequireAuth from './Pages/RequireAuth';
+import Logout from './Pages/Logout';
+import LinkPage from './Pages/LinkPage';
+
+const ROLES = {
+    'User' : 2001,
+    'Admin' : 1984,
+}
+
 
 function App() {
 
-  return (<Router>
-    <div className="App">
-    <Navbar></Navbar>
-      <Routes>
-      <Route exact path='/' element={< Home />}></Route>
-      <Route exact path='/login' element={< Login />}></Route>
-      <Route exact path='/register' element={< Register />}></Route>
-      <Route exact path='/medinfo' element={< MedInfo />}></Route>
-      <Route exact path='/feed' element={< Feed />}></Route>
-      <Route exact path='/dashboard' element={< Dashboard/>}></Route>
-      <Route exact path='/admin' element={< Admin />}></Route>
-      <Route exact path='/phoneotp' element={< PhoneOTP />}></Route>
-      <Route exact path='/about' element={< About />}></Route>
+  return (
+   <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path='/' element={<Layout/>}>
+            {/*public routes */}
+            <Route index element={<Home/>}/>
+            <Route path="about" element={<About/>}/>
+            <Route path="login" element={<Login/>}/>
+            <Route path="register" element={<Register/>}/>
+            <Route path='phoneotp' element={<PhoneOTP/>}/>
+            <Route path='medinfo' element={<MedInfo/>}/>
+            <Route path="unauthorized" element={<Unauthorized />}/>
+            <Route path="logout" element={<Logout/>}/>
+            <Route path="linkpage" element={<LinkPage/>}/>
 
+            {/*protected routes*/}
+            <Route element={<RequireAuth allowedRoles={2001}/>}>
+                <Route path='feed' element={<Feed />}/>
+                <Route path='dashboard' element={<Dashboard/>}/>
+            </Route>
 
+            <Route element={<RequireAuth allowedRoles={1984}/>}>
+              <Route path='admin' element={<Admin/>}/>
+            </Route>
+
+            {/* catcah all */}
+            <Route path="*" element={<Missing/>}/>
+            </Route>
       </Routes>
-    </div >
-  </Router >
+    </AuthProvider>
+  </BrowserRouter>
   );
 }
 export default App;
