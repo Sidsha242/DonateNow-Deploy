@@ -90,14 +90,17 @@ app.post("/sendMsg", async (req,res) => {
   }
 
 
-for(let j =0 ; j<filteredUsers.length;j++){
-  //  client.messages.create({
-  //      to: {phoneNum_arr[i]},
-  //     from: '+19382536013',
-  //      body: {txtMsg}
-  //  })
-  //  .then((message) => console.log('message sent'))
-}
+// for(let k =0 ; k<filteredUsers.length;k++)
+// {
+//     client.messages.create({
+
+//         to: '+' + phoneNum_arr[k],
+//       from: '+19382536013',
+//         body: txtMsg
+
+//     })
+//     .then((message) => console.log('message sent'))
+// }
 })
 
 

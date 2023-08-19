@@ -7,7 +7,6 @@ import Feed from './Pages/Feed';
 import Dashboard from './Pages/Dashboard';
 import Admin from './Pages/Admin';
 import MedInfo from './Pages/MedInfo';
-import PhoneOTP from './Pages/PhoneOTP';
 import About from './Pages/About';
 import Layout from './Pages/Layout';
 import Missing from './Pages/Missing';
@@ -36,7 +35,6 @@ function App() {
             <Route path="about" element={<About/>}/>
             <Route path="login" element={<Login/>}/>
             <Route path="register" element={<Register/>}/>
-            <Route path='phoneotp' element={<PhoneOTP/>}/>
             <Route path='medinfo' element={<MedInfo/>}/>
             <Route path="unauthorized" element={<Unauthorized />}/>
             <Route path="logout" element={<Logout/>}/>

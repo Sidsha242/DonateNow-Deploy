@@ -86,7 +86,7 @@ const handleSubmit = (e) => {
             <div className='ml-20 pt-10 pb-20 overflow-scroll' >
 
                       {exp_arr.map((id) => (
-                          <AdminCard state={id} username={id.username} email={id.email} createdAt={id.createdAt} bloodgrp={id.usersdetails[0].bldgrp}/>
+                          <AdminCard state={id} username={id.username} email={id.email} createdAt={id.createdAt} bloodgrp={id.usersdetails[0].bldgrp} phonenum={id.phonenum}/>
                       ))}
 
                   </div>
@@ -110,7 +110,7 @@ const AdminCard = (props) => {
  // {console.log(props)}
   return (
     <div className='bg-[#E3DEC6]'>
-      <div className='grid grid-cols-4 font-bold text-md flex pl-3 pt-5 pb-5'>
+      <div className='grid grid-cols-5 gap-9 font-bold text-md flex pl-3 pt-5 pb-5'>
        <div>
         {props.username}
        </div>
@@ -122,6 +122,9 @@ const AdminCard = (props) => {
        </div>
        <div>
         {props.bloodgrp}
+       </div>
+       <div>
+        {props.phonenum}
        </div>
       </div>
     </div>
