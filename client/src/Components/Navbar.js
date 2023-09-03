@@ -18,7 +18,7 @@ const Navbar = () => {
             setLoggedIn(true);
             console.log(isloggedIn);
         }
-    },[])
+    },[auth, isloggedIn])
    
 
     const [isOpen, setIsOpen] = useState(false);

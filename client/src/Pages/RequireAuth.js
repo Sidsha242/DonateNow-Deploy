@@ -10,6 +10,7 @@ const RequireAuth = ({ allowedRoles }) => {
   console.log(`%c Auth:${auth}`,'background: #222; color: #bada55');
  
  return(
+    //auth?.role?.find(role => allowedRoles?.includes(role))
     auth?.role === allowedRoles
       ? <Outlet/>  //IF TRUE GO TO DESIRED PLACE
       : auth?.email

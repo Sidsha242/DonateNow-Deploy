@@ -3,9 +3,9 @@ import { useNavigate  } from 'react-router-dom'
 import React from 'react'
 
 const Missing = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate();   //useNavigate is a hook that returns a navigate function
 
-  const goBack = () => navigate(-1);
+  const goBack = () => navigate(-1);   //navigate(-1) is the same as clicking the back button on the browser
 
   return (
     <div className='text-center h-screen'>

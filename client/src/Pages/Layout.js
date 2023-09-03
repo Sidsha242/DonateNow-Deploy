@@ -14,3 +14,6 @@ const Layout = () => {
 }
 
 export default Layout
+
+// outlet component is used to render all the child routes of a parent route
+// it represents all the children of layout component

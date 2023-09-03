@@ -1,5 +1,3 @@
-
-
 import React from 'react'
 import FeedCard from '../Components/FeedCard'
 

@@ -41,18 +41,20 @@ function App() {
             <Route path="linkpage" element={<LinkPage/>}/>
 
             {/*protected routes*/}
-            <Route element={<RequireAuth allowedRoles={2001}/>}>
+            {/* protected for users */}
+            <Route element={<RequireAuth allowedRoles={ROLES.User}/>}>
                 <Route path='feed' element={<Feed />}/>
                 <Route path='dashboard' element={<Dashboard/>}/>
             </Route>
 
-            <Route element={<RequireAuth allowedRoles={1984}/>}>
+            {/* protected for admins */}
+            <Route element={<RequireAuth allowedRoles={ROLES.Admin}/>}>
               <Route path='admin' element={<Admin/>}/>
             </Route>
 
-            {/* catcah all */}
+            {/* catch all */}
             <Route path="*" element={<Missing/>}/>
-            </Route>
+          </Route>
       </Routes>
     </AuthProvider>
   </BrowserRouter>

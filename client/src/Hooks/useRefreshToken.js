@@ -1,5 +1,5 @@
 import { axios } from "../axios";
-import useAuth from './useAuth';
+import useAuth from '../Hooks/useAuth';
 
 //JWT access tokens last 20 mins if we want more than that we need this
 
