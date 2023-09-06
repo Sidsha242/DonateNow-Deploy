@@ -71,3 +71,28 @@ const useAxiosPrivate = () => {
 }
 
 export default useAxiosPrivate;
+
+
+//axiosPrivate is the axios instance with the baseURL set to the private API endpoint.
+//useRefreshToken is a custom hook that returns a function that can be used to refresh the access token.
+//useAuth is a custom hook that returns the auth object from the global context.
+//useEffect is used to set up the interceptors.
+//The request interceptor is used to add the access token to the request headers.
+//The response interceptor is used to refresh the access token if it has expired.
+//The return function is used to remove the interceptors when the component unmounts.
+//The axiosPrivate instance is returned so that it can be used to make requests to the private API.
+
+//what are interceptors?
+//Interceptors are functions that are called before a request is sent and before a response is returned.
+//They can be used to modify the request or response before they are handled by the application.
+//They can also be used to handle errors that occur during the request or response.
+//Interceptors are useful for adding authentication tokens to requests, refreshing expired tokens, and handling errors.
+//Interceptors are added to an axios instance using the interceptors property.
+//The interceptors property is an object with two properties: request and response.
+//The request property is used to add a function that will be called before a request is sent.
+//The response property is used to add a function that will be called before a response is returned.
+//The request and response properties are objects with two methods: use and eject.
+//The use method is used to add an interceptor function.
+//The eject method is used to remove an interceptor function.
+//The use method returns an interceptor id that can be used to remove the interceptor.
+//The eject method takes the interceptor id as an argument.

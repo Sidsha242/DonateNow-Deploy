@@ -2,17 +2,48 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const path = require("path");
+const config = require("./config");
 const bodyParser = require("body-parser");
 const jsonwebtoken = require("jsonwebtoken");
+const cookieParser = require('cookie-parser');
 const mongoose = require("mongoose");
+
+const corsOptions = require('./config/corsOptions');
+const { logger } = require('./middleware/logEvents');
+const errorHandler = require('./middleware/errorHandler');
+const credentials = require('./middleware/credentials');
+
 const { accountSID, authToken } = require('./config');
 const client = require('twilio')(accountSID,authToken);
 
-const port = 3031;
-const config = require("./config");
+const PORT = 3031;
+
+
+// custom middleware logger
+app.use(logger);
+
+// Handle options credentials check - before CORS!
+// and fetch cookies credentials requirement
+app.use(credentials);
+
+// Cross Origin Resource Sharing
+app.use(cors(corsOptions));
+
+// built-in middleware to handle urlencoded form data
+app.use(express.urlencoded({ extended: false }));
+
+// built-in middleware for json 
+app.use(express.json());
+
+//middleware for cookies
+app.use(cookieParser());
+
+//serve static files
+app.use('/', express.static(path.join(__dirname, '/public')));
+
 
 const dbUrl = config.dbUrl;
-
 mongoose.connect(dbUrl,{
 });
 const db = mongoose.connection;
@@ -21,10 +52,6 @@ db.once("open", function () {
   console.log("DB Connected successfully");
 });
 
-
-app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 app.use(function(req, res, next) {
   if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
@@ -39,83 +66,29 @@ app.use(function(req, res, next) {
   }
 });
 
-app.get("/admin/admininfo", async(req, res) => {
-  const result = await db.collection('users').aggregate([
-    {
-      $lookup: {
-        from: 'medinfos',
-        localField: 'email',
-        foreignField: 'email',
-        as: 'usersdetails'
-      }
-    }
-  ]).toArray()
-  res.send(result);
 
-});
+//routes
+app.use('/user', require('./routes/userRoutes'));
+app.use('/admin', require('./routes/adminRoutes'));
 
-app.post("/sendMsg", async (req,res) => {
 
-  const BloodGroup = req.body.bldgrp;
-  const txtMsg = req.body.smsText;
-  console.log(txtMsg);
-  console.log(`Blood Group:${BloodGroup}`);
-   
-  const result = await db.collection('users').aggregate([
-      {
-        $lookup: {
-          from: 'medinfos',
-          localField: 'email',
-          foreignField: 'email',
-          as: 'usersdetails'
-        }
-      }
-    ]).toArray();
-
-   let filteredUsers = [];
-   for (let i= 0; i<result.length; i++) 
-   {
-       if(result[i].usersdetails[0].bldgrp == BloodGroup) 
-       {
-           filteredUsers = [...filteredUsers, result[i]];
-       }
-   }
-
-  var phoneNum_arr = [];
-  for(let j=0;j<filteredUsers.length;j++)
-  {
-       console.log('Filtered Users:');
-       console.log(filteredUsers[j]);
-       phoneNum_arr[j] = filteredUsers[j].phonenum
+//error pages and logs
+app.all("*", (req, res) => {
+  res.status(404);
+  if (req.accepts('html')) {
+      res.sendFile(path.join(__dirname, 'views', '404.html'));
+  } else if (req.accepts('json')) {
+      res.json({ "error": "404 Not Found" });
+  } else {
+      res.type('txt').send("404 Not Found");
   }
-
-
-// for(let k =0 ; k<filteredUsers.length;k++)
-// {
-//     client.messages.create({
-
-//         to: '+' + phoneNum_arr[k],
-//       from: '+19382536013',
-//         body: txtMsg
-
-//     })
-//     .then((message) => console.log('message sent'))
-// }
-})
-
-
-const userRoutes = require('./routes/userRoutes');
-const adminRoutes = require('./routes/adminRoutes');
-
-app.use('/user',userRoutes);
-app.use('/admin',adminRoutes);
-
-app.use(function(req, res) {
-  res.status(404).send({ url: req.originalUrl + ' not found' })
- });
-
-
-app.listen(port, function () {
-  console.log("Runnning on " + port);
 });
+
+app.use(errorHandler);
+
+
+app.listen(PORT, function () {
+  console.log("Runnning on " + PORT);
+});
+
 module.exports = app;

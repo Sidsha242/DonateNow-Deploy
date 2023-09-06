@@ -26,28 +26,35 @@ const Register = () => {
             username: usernameReg, 
             email : emailReg,                             
             password: passwordReg,
-            phonenum: phonenumReg
-
+            phonenum: phonenumReg,
+            verified: true,
         }).then((response) => {
+
             setMessageReg(response.data.message);
             if(response.data.message === 'Registered Successful')
             {
                 console.log(response.data.result);
+                //localStorage
                 localStorage.setItem("user", JSON.stringify(response.data.result));
-              
                 console.log('User added');
+                
+                //how to send response object to /medinfo
 
-                //  setTimeout(() => {
-                //      window.location.href = '/medinfo';
-                //  }, 1000)
+
+                setTimeout(() => {
+                    window.location.href = '/medinfo';
+                }, 1000)
 
             }
+        }).catch((err) => {
+            console.log(err);
+            setMessageReg('Error in registering');
         });
     };
 
     const sendOTP = () => {
         try{
-            axios.get('/user/login?phonenumber='+phonenumReg+'&channel=sms').then((response) => {
+            axios.get('/user/login?phonenumber=91'+phonenumReg+'&channel=sms').then((response) => {
                 console.log(response);
                 setTimeout(() => {
                 }, 1000)
@@ -65,15 +72,15 @@ const Register = () => {
     }
     const verify = () => {
         try{
-            axios.get('/user/verify?phonenumber=' + phonenumReg + '&code=' + OTP).then((response) => {
+            axios.get('/user/verify?phonenumber=91' + phonenumReg + '&code=' + OTP).then((response) => {
                 console.log(OTP);
                 console.log(response);
                 if(response.data.status === 'approved'){
                     console.log('User verified');
+                    //make the isVerfied to true then register
                     register();
-                    setTimeout(() => {
-                        window.location.href = '/medinfo';
-                    }, 1000)
+                    //how to send the user object to /medinfo
+
                 }else{
                     console.log('User not verified');
                     handleClose();
@@ -131,7 +138,7 @@ const Register = () => {
                     <div>
                         <label htmlFor='phonenumReg' className='block mb-3 items-start font-bold mt-2'>Enter Phone Number :</label>
                         <input type="text" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" 
-                        required id="phonenumReg" name="phonenumReg" placeholder="Enter number like 91xxxxxxxxxx" value={phonenumReg} onChange={(e) => setPhoneNumReg(e.target.value)} />
+                        required id="phonenumReg" name="phonenumReg" placeholder="Enter number like xxxxxxxxxx" value={phonenumReg} onChange={(e) => setPhoneNumReg(e.target.value)} />
                     </div>
 
                     <button type="submit" className="w-full text-white bg-emerald-400 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2.5 py-2.5 text-center" onClick={()=>{ sendOTP(); handleClickOpen();}}>Sign Up</button>
