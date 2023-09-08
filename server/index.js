@@ -1,4 +1,5 @@
 // index.js
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -9,7 +10,9 @@ const jsonwebtoken = require("jsonwebtoken");
 const cookieParser = require('cookie-parser');
 const mongoose = require("mongoose");
 
+const connectDB = require('./config/dbConn');
 const corsOptions = require('./config/corsOptions');
+const verifyJWT = require('./middleware/verifyJWT');
 const { logger } = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
 const credentials = require('./middleware/credentials');
@@ -19,6 +22,8 @@ const client = require('twilio')(accountSID,authToken);
 
 const PORT = 3031;
 
+//connect to MongoDB
+connectDB();
 
 // custom middleware logger
 app.use(logger);
@@ -43,33 +48,13 @@ app.use(cookieParser());
 app.use('/', express.static(path.join(__dirname, '/public')));
 
 
-const dbUrl = config.dbUrl;
-mongoose.connect(dbUrl,{
-});
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error: "));
-db.once("open", function () {
-  console.log("DB Connected successfully");
-});
-
-
-app.use(function(req, res, next) {
-  if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
-    jsonwebtoken.verify(req.headers.authorization.split(' ')[1], 'RESTFULAPIs', function(err, decode) {
-      if (err) req.user = undefined;
-      req.user = decode;
-      next();
-    });
-  } else {
-    req.user = undefined;
-    next();
-  }
-});
-
 
 //routes
 app.use('/user', require('./routes/userRoutes'));
 app.use('/admin', require('./routes/adminRoutes'));
+app.use('/refresh', require('./routes/refresh'));
+
+//app.use(verifyJWT); after this all routes will be verified
 
 
 //error pages and logs
@@ -87,8 +72,14 @@ app.all("*", (req, res) => {
 app.use(errorHandler);
 
 
-app.listen(PORT, function () {
-  console.log("Runnning on " + PORT);
+mongoose.connection.on('error', err => {
+  console.log(err);
+});
+mongoose.connection.once('open', () => {
+  console.log('Connected to MongoDB!');
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
 });
 
 module.exports = app;

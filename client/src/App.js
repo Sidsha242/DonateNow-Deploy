@@ -11,6 +11,7 @@ import About from './Pages/About';
 import Layout from './Pages/Layout';
 import Missing from './Pages/Missing';
 import Unauthorized from './Pages/Unauthorized';
+import PersistLogin from './Components/PersistLogin';
 
 import { AuthProvider } from './Context/AuthProvider';
 import RequireAuth from './Pages/RequireAuth';
@@ -42,14 +43,16 @@ function App() {
 
             {/*protected routes*/}
             {/* protected for users */}
-            <Route element={<RequireAuth allowedRoles={ROLES.User}/>}>
-                <Route path='feed' element={<Feed />}/>
-                <Route path='dashboard' element={<Dashboard/>}/>
-            </Route>
+            <Route element={<PersistLogin/>}>
+              <Route element={<RequireAuth allowedRoles={ROLES.User}/>}>
+                  <Route path='feed' element={<Feed />}/>
+                  <Route path='dashboard' element={<Dashboard/>}/>
+              </Route>
 
-            {/* protected for admins */}
-            <Route element={<RequireAuth allowedRoles={ROLES.Admin}/>}>
-              <Route path='admin' element={<Admin/>}/>
+              {/* protected for admins */}
+              <Route element={<RequireAuth allowedRoles={ROLES.Admin}/>}>
+                <Route path='admin' element={<Admin/>}/>
+              </Route>
             </Route>
 
             {/* catch all */}

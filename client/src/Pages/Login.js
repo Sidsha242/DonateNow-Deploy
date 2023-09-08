@@ -10,7 +10,7 @@ const Login = () => {
     const userRef = useRef();   //to store the user data
     const errRef = useRef();    //to store the error message    
 
-    const { setAuth } = useAuth();
+    const { persist,setPersist,setAuth } = useAuth();
 
     const [logemail, setEmail] = useState('');  
     const [logpassword, setPassword] = useState('');
@@ -32,10 +32,13 @@ const Login = () => {
         e.preventDefault();   
         try{
             const response = await axios.post(LOGIN_URL, 
-            {
-            email: logemail,                             
-            password: logpassword,
-            },);
+                {
+                email: logemail,                             
+                password: logpassword,
+                },{
+                    withCredentials: true   //is required for sending cookies to server
+                }
+            );
             setMessage(response?.data.message);
             if(response.data.message === 'Login Successful')
             {
@@ -55,8 +58,8 @@ const Login = () => {
                     role : roles,
                     token : accessToken })  //saved in global context
 
-                setEmail('');
-                setPassword('');
+                // setEmail('');
+                // setPassword('');
                 navigate(from, { replace: true });
                         
             }
@@ -75,6 +78,14 @@ const Login = () => {
             errRef.current.focus();
         }
     }
+
+    const togglePersist = () => {
+        setPersist(prev => !prev);
+    }
+
+    useEffect(()=>{
+        localStorage.setItem("persist", persist);
+    },[persist])
 
   return (
     <>
@@ -98,6 +109,10 @@ const Login = () => {
                 </div>
                 <button type="submit" className="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2.5 py-2.5 text-center" 
                 >Login</button>
+                <div className='persistCheck'>
+                    <input type='checkbox' id='persist' onChange={togglePersist} checked={persist} />
+                    <label htmlFor='persist'>Trust this Device</label>
+                </div>
             </form>
             <h2 className='font-bold text-lg'>{message}</h2>
 

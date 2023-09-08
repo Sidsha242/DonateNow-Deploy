@@ -30,9 +30,13 @@ const UserSchema = mongoose.Schema({
   role: {
     type: Number,
     default: 2001
+  },
+  refreshToken: {
+    type: String,
+    default: ""
   }
 });
 
 
-module.exports = mongoose.model("user", UserSchema);
+module.exports = mongoose.model("User", UserSchema);
 

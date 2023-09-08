@@ -8,6 +8,7 @@ require("dotenv").config();
 
 const userController = require("../controllers/usersController");
 const medInfoController = require("../controllers/medInfoController");
+const verifyJWT = require("../middleware/verifyJWT");
 
 
 const client=require('twilio')(config.accountSID,config.authToken)
@@ -34,9 +35,7 @@ router.post("/register" , userController.userRegister);
 
 router.post("/sign_in" , userController.userSignIn);
 
-// router.post("/sign_out" , async (req, res) => {
-//   res.json({ auth: false, token: null, message: "Logged Out" });
-// });
+router.get("/sign_out" , userController.userSignOut);
 
 router.route("/medinfo")
     .post(medInfoController.addMedInfo);
