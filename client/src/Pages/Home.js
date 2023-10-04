@@ -1,13 +1,17 @@
 import React from 'react'
 import './Home.css'
 import { Link } from 'react-router-dom';
+import { motion } from "framer-motion"
+
+import img1 from '../Images/Group 2.svg'
 
 const Home = () => {
 
     return (
         <div className='bg-red-700 h-full'>
+            <motion.div className='' initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} transition={{duration: 0.9,delay: 0.5,ease: [0, 0.71, 0.2, 1.01]}}>
             <div className='grid grid-cols-2 p-5'>
-                <div className="title-cont pt-28 pl-10 container-title mx-auto">
+                <div className="title-cont pt-24 pl-10 container-title mx-auto">
                     <h1 className='title text-8xl text-white'>Help Save Lives</h1>
                 </div>
                 {/* <div>
@@ -17,7 +21,11 @@ const Home = () => {
                         alt="Workflow"
                     />
                 </div> */}
+                <div className='pt-24'>
+                    <img src={img1}></img>
+                </div>
             </div>
+            </motion.div>
             <div className='pl-10 pb-10 pt-20'>
                 <ol className="relative border-l border-black">
                     <li className="mb-10 ml-4">

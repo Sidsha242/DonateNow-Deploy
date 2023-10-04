@@ -47,10 +47,10 @@ const Login = () => {
                 const roles = response?.data?.roles;
                 const authpassword = response?.data?.result?.password
 
-                console.log(accessToken);
+               /* console.log(accessToken);
                 console.log(roles);
                 console.log(logemail);
-                console.log(authpassword);
+                console.log(authpassword); */
 
                 setAuth({ 
                     email : logemail, 

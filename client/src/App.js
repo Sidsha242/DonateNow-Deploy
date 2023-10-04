@@ -5,7 +5,6 @@ import Register from './Pages/Register';
 import Home from './Pages/Home';
 import Feed from './Pages/Feed';
 import Dashboard from './Pages/Dashboard';
-import Admin from './Pages/Admin';
 import MedInfo from './Pages/MedInfo';
 import About from './Pages/About';
 import Layout from './Pages/Layout';
@@ -17,6 +16,10 @@ import { AuthProvider } from './Context/AuthProvider';
 import RequireAuth from './Pages/RequireAuth';
 import Logout from './Pages/Logout';
 import LinkPage from './Pages/LinkPage';
+import AdminLayout from './Pages/AdminLayout';
+import AdminDash from './AdminPages/AdminDash';
+import SendMessage from './AdminPages/SendMessage';
+import AddDonation from './AdminPages/AddDonation';
 
 const ROLES = {
     'User' : 2001,
@@ -51,7 +54,11 @@ function App() {
 
               {/* protected for admins */}
               <Route element={<RequireAuth allowedRoles={ROLES.Admin}/>}>
-                <Route path='admin' element={<Admin/>}/>
+                <Route path='admin' element={<AdminLayout/>}>
+                    <Route path='dash' element={<AdminDash/>}/>
+                    <Route path='sendmsg' element={<SendMessage/>}/>
+                    <Route path='newdon' element={<AddDonation/>}/>
+                </Route>
               </Route>
             </Route>
 

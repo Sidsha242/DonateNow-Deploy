@@ -15,7 +15,11 @@ module.exports = {
     "./src/Pages/Layout.js",
     "./src/Pages/Unauthorized.js",
     "./src/Components/FeedCard.js",
-    "./src/Pages/LinkPage.js"
+    "./src/Pages/LinkPage.js",
+    "./src/Components/AdminNavbar.js",
+    "./src/AdminPages/AdminDash.js",
+    "./src/AdminPages/SendMessage.js",
+    "./src/AdminPages/AddDonation.js"
   ],
   theme: {
     extend: {
@@ -57,7 +61,8 @@ module.exports = {
     'Segoe UI Emoji', 
     'Segoe UI Symbol', 
     'Noto Color Emoji'
-  ]
+  ],
+  'poppins': ['Poppins', 'sans-serif']
     }
 
   },

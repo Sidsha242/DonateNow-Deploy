@@ -8,21 +8,23 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     const [isloggedIn, setLoggedIn] = useState(false);
+
     const { auth } = useAuth();
 
     useEffect(()=>{
-        if(auth)
+        if(auth?.data)
         {
+            console.log(auth);
             setLoggedIn(true);
             console.log(isloggedIn);
         }
-    },[isloggedIn])
+    },[])
    
 
     const [isOpen, setIsOpen] = useState(false);
     return (
         <div>
-            <nav className="bg-red-700 rounded-md">
+            <nav className="bg-red-700">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16">
                         <div className="flex items-center">
@@ -39,7 +41,7 @@ const Navbar = () => {
                                     <Link to="/dashboard" className="text-[#F2EEDB] hover:bg-[#FA9884] hover:text-white px-3 py-2 rounded-md text-lg font-semibold">
                                             Donate
                                     </Link>
-                                    <Link to="/admin" className="text-[#F2EEDB] hover:bg-[#FA9884] hover:text-white px-3 py-2 rounded-md text-lg font-semibold">
+                                    <Link to="/admin/dash" className="text-[#F2EEDB] hover:bg-[#FA9884] hover:text-white px-3 py-2 rounded-md text-lg font-semibold">
                                             Admin
                                     </Link>
                                     {isloggedIn ? <Link to="/logout" className="text-[#F2EEDB] hover:bg-[#FA9884] text-white font-bold py-2 px-4 rounded">
@@ -124,9 +126,12 @@ const Navbar = () => {
                                     <Link to="/dashboard" className="text-[#F2EEDB] hover:bg-[#FA9884] hover:text-white px-3 py-2 rounded-md text-lg font-semibold">
                                             Donate
                                     </Link>
-                                    <Link to="/login" className="text-[#F2EEDB] hover:bg-[#FA9884] text-white font-bold py-2 px-4 rounded">
-                                                Log In
-                                    </Link>
+                                    {isloggedIn && <Link to="/logout" className="text-[#F2EEDB] hover:bg-[#FA9884] text-white font-bold py-2 px-4 rounded">
+                                                Log Out
+                                    </Link>}
+                                     <Link to="/login" className="text-[#F2EEDB] hover:bg-[#FA9884] text-white font-bold py-2 px-4 rounded">
+                                     Log In
+                                     </Link>
                                      <Link to="/feed" className='text-[#F2EEDB] hover:bg-[#FA9884] text-white font-bold py-2 px-4 rounded'>
                                       Notifications
                                     </Link>

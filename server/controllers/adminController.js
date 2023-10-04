@@ -38,7 +38,30 @@ const adminInfo = async(req, res) => {
       }
     }
   ]).toArray()
-  res.send(result);
+  const bloodGroupMap = new Map(
+  );
+  bloodGroupMap.set('A+', 0)
+  bloodGroupMap.set('A-', 0)
+  bloodGroupMap.set('B+', 0)
+  bloodGroupMap.set('B-', 0)
+  bloodGroupMap.set('AB+', 0)
+  bloodGroupMap.set('AB-', 0)
+
+  result.forEach(entry => {
+    bloodGroupMap.set(entry?.usersdetails[0]?.bldgrp,bloodGroupMap.get(entry?.usersdetails[0]?.bldgrp) + 1)
+  })
+
+  const jsonObject = {};
+  for (let [key, value] of bloodGroupMap) {
+    const bld = `${key}`;
+    const num = parseInt(`${value}`);
+    jsonObject[bld] = num;
+  }
+ 
+  let op = Object.entries(jsonObject)
+         .map(([ label, value ] ) => ({ label, value }))
+  console.log(op)
+  res.json({result : result, piedata: op});
 }
 
 const sendMsg = async (req,res) => {

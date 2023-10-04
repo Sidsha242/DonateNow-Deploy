@@ -5,9 +5,9 @@ const adminController = require("../controllers/adminController");
 const verifyJWT = require("../middleware/verifyJWT");
 
 
-router.get("/adminget", verifyJWT,  adminController.getAllUsersEntirely);
+router.get("/adminget", adminController.getAllUsersEntirely); //removed verifyJWT
 
-router.get("/admininfo", verifyJWT,  adminController.adminInfo);
+router.get("/admininfo", adminController.adminInfo); //removed verifyJWT
 
 router.post("/sendMsg", adminController.sendMsg);
 
