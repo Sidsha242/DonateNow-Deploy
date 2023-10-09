@@ -19,7 +19,7 @@ const MedInfo = () => {
     const loggedInUser = JSON.parse(localStorage.getItem("user"));
 
     const medinfo = () => {
-        Axios.post('http://localhost:3031/user/medinfo', {
+        Axios.post('http://localhost:3031/user/addMedInfo', {
             user_id : loggedInUser._id,
             email : loggedInUser.email,
             bldgrp : bldgrp, 

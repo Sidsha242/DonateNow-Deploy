@@ -52,7 +52,8 @@ const Login = () => {
                 console.log(logemail);
                 console.log(authpassword); */
 
-                setAuth({ 
+                setAuth({
+                    id : response?.data?.result?._id, 
                     email : logemail, 
                     pass : authpassword,
                     role : roles,

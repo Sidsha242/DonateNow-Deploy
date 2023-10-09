@@ -11,10 +11,11 @@ const useRefreshToken = () => {
             withCredentials: true   //is required for sending cookies to server
         });
         setAuth((prev) => {
-            console.log(JSON.stringify(prev));
-            console.log(response.data.token);
+            console.log("In refresh token");
+            console.log("prev = "+JSON.stringify(prev));
             return { 
                 ...prev,
+                id: response.data.id,
                 role: response.data.role, 
                 token: response.data.token
             }

@@ -1,6 +1,7 @@
 import { createContext , useState} from 'react';
 
 const initialContextState = {
+    id : 0,
     email : '',
     password : '',
     role : 0,

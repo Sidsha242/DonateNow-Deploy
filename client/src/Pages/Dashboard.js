@@ -1,38 +1,50 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 import axios from '../axios';
+import { useAuth } from '../Hooks/useAuth';
 
 import img1 from '../Images/donate_icon.png'
 import img2 from "../Images/blood-donation.svg"
-import gif1 from '../Images/woman_donate.gif'
 import CountUp from 'react-countup';
 
 import { motion } from "framer-motion"
 
 const Dashboard = () => {
 
+  const auth = useAuth();
 
-  const [usern,setUsername] = useState('');
-  const [user_id,setUserid] = useState('');
-  const [medata,setMedData] = useState('');
+  const [medData,setMedData] = useState('');
 
+ 
+  const userID = auth?.auth?.id;
+  console.log(auth);
+  useEffect(() => {
+    console.log('Fetching data for user_id:', userID); // Log user_id before making the request
 
-  //  useEffect(() => {
-  //   Axios.get(`http://localhost:3031/getmedinfo/${user_id}`, {
-  //    }).then((response) => {
-  //         console.log(response);
-  //        console.log("response received");
-  //         //setMedData(response.data);
-  //    });
+    axios.get(`http://localhost:3031/user/getDetailsOfUser/${userID}`, {
+        headers: {
+          Authorization: `Bearer ${auth?.auth?.token}`,
+        },
+      }).then((response) => {
+        console.log("got all details of the user");
+        setMedData(response.data); // Assuming response.data is an array of donor data
+      })
+      .catch((error) => {
+        console.error('Error fetching donor data:', error);
+      });
+  }, [userID]); // Only run this effect when user_id changes
 
-  //  }, []);
+  console.log(medData);
+  const user = medData[0]?.userDetails[0];
+  const bldAmount = medData[0]?.bldAmount || 10;
+
 
 
   return (
     <div>
        <div className='bg-[#F2EEDB]'>
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto">
-        <h1 className='font-bold text-5xl'>Hi {usern} </h1>
+        <h1 className='font-bold text-5xl'>Hi {user?.username} </h1>
             <div className='w-full mt-10 p-5 bg-[#E3DEC6] rounded-lg shadow h-full'>
               <div className='mt-5 flex flex-row'>
                 <div className='bg-red-500 rounded-md w-80 p-5 basis-1/3'>
@@ -68,7 +80,7 @@ const Dashboard = () => {
                 <div className='rounded-md bg-[#FF69B4] pl-10 pt-8'>
                 <div className='flex'>
                 <div className='text-white text-8xl font-poppins'>
-                <CountUp end={100} duration={10} /> 
+                <CountUp end={bldAmount} duration={10} /> 
                 </div><div className='text-white text-3xl'>ml</div>
                 </div>
 

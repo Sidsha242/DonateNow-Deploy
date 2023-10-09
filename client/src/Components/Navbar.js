@@ -8,20 +8,20 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     const [isloggedIn, setLoggedIn] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     const { auth } = useAuth();
 
     useEffect(()=>{
-        if(auth?.data)
+        if(auth?.token !== undefined)
         {
             console.log(auth);
             setLoggedIn(true);
-            console.log(isloggedIn);
+            console.log("isLoggedin: "+isloggedIn);
         }
-    },[])
+    },[auth])
    
 
-    const [isOpen, setIsOpen] = useState(false);
     return (
         <div>
             <nav className="bg-red-700">
@@ -44,12 +44,16 @@ const Navbar = () => {
                                     <Link to="/admin/dash" className="text-[#F2EEDB] hover:bg-[#FA9884] hover:text-white px-3 py-2 rounded-md text-lg font-semibold">
                                             Admin
                                     </Link>
-                                    {isloggedIn ? <Link to="/logout" className="text-[#F2EEDB] hover:bg-[#FA9884] text-white font-bold py-2 px-4 rounded">
+                                    {
+                                        isloggedIn ? 
+                                        <Link to="/logout" className="text-[#F2EEDB] hover:bg-[#FA9884] text-white font-bold py-2 px-4 rounded">
                                                 Log Out
-                                    </Link> :
-                                     <Link to="/login" className="text-[#F2EEDB] hover:bg-[#FA9884] text-white font-bold py-2 px-4 rounded">
-                                     Log In
-                                     </Link> }
+                                        </Link>
+                                         :
+                                        <Link to="/login" className="text-[#F2EEDB] hover:bg-[#FA9884] text-white font-bold py-2 px-4 rounded">
+                                        Log In
+                                        </Link> 
+                                    }
                                      <Link to="/feed">
                                      <button className="inline-block relative">
                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" stroke="currentColor">
