@@ -2,14 +2,12 @@ import React from 'react'
 import SearchBar from '../Components/SearchBar'
 import { useState, useEffect } from 'react';
 import axios from '../axios';
-import { useAuth } from '../Hooks/useAuth';
 
 const ADMIN_INFO_URL = '/admin/admininfo';
 
 
 
 const AddDonation = () => {
-  const auth = useAuth();
   const [exp_arr, set_exp_arr] = useState([]);
 
   useEffect(() => {
@@ -27,13 +25,12 @@ const AddDonation = () => {
   console.log(exp_arr);
   const displayedData = Filter ? exp_arr.filter(element => element?.username.toLowerCase().includes(Filter.toLowerCase())) : exp_arr
 
-  console.log(auth);
   function addDonation(){
 
   }
 
   return (
-    <div className='h-full p-3 mr-5'>
+    <div className='h-full p-3 grid grid-cols-2 mr-5'>
       <div>
       <h1 className='text-2xl font-bold'>Add Donation Details</h1>
       <SearchBar setFilter={setFilter}/>

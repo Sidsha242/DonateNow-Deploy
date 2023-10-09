@@ -5,7 +5,7 @@ const db = mongoose.connection;
 
 const getAllUsersEntirely = async(req, res) => {
     //const users = await User.find();
-    const users = User.aggregate([
+    const users = await User.aggregate([
       {
          $lookup:
             {

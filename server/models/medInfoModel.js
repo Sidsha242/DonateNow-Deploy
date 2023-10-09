@@ -14,8 +14,9 @@ const MedInfoSchema = mongoose.Schema({
     type: String,
     required: true,
   },
- age: {
+  age: {
     type: Number,
+    min: 18, max: 65,
     required: true
   },
   

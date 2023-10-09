@@ -18,31 +18,4 @@ const addMedInfo = async (req, res) => {
     }
 }
 
-const getMedInfo = async (req, res) => {
-    console.log('Inside getinfo');
-    const id = req.params.id;
-  
-    try {
-      const info = await MedInfo.findOne({
-        _id: req.params.id,
-      });
-      if (info) {
-        res.status(200).json({
-          status: 200,
-          data: info,
-        });
-      }
-      res.status(400).json({
-        status: 400,
-        message: "No user info found",
-      });
-    } 
-    catch (err) {
-      res.status(400).json({
-        status: 400,
-        message: err.message,
-      });
-    }
-}
-
-module.exports = {addMedInfo,getMedInfo};
+module.exports = {addMedInfo};

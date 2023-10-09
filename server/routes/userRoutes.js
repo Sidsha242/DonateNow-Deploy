@@ -37,10 +37,9 @@ router.post("/sign_in" , userController.userSignIn);
 
 router.get("/sign_out" , userController.userSignOut);
 
-router.route("/medinfo")
+router.route("/addMedInfo")
     .post(medInfoController.addMedInfo);
 
-router.route("/getmedinfo/:id") 
-    .get(medInfoController.getMedInfo);
+router.get("/getDetailsOfUser/:id", userController.getDetailsOfUser);
 
 module.exports = router;

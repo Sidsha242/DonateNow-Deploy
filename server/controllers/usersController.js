@@ -1,9 +1,10 @@
-const User = require("../models/userModel");
+const MedInfo = require('../models/medInfoModel'); 
+const User = require('../models/userModel'); 
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { Db } = require("mongodb");
 const mongoose = require("mongoose");
-const db = mongoose.connection;
 
 const userRegister = async (req, res) => {
     var newUser = new User({
@@ -42,7 +43,7 @@ const userSignIn = async (req, res) => {
         });
       
       if (foundUser) {
-        bcrypt.compare(req.body.password, foundUser.password, (error, response) => {  
+        bcrypt.compare(req.body.password, foundUser.password, async (error, response) => {  
           if (response) {
               const id = foundUser._id
               console.log(foundUser?.role);
@@ -67,7 +68,7 @@ const userSignIn = async (req, res) => {
 
               // Saving refreshToken with current user
               foundUser.refreshToken = refreshToken;
-              const result = foundUser.save();
+              const result = await foundUser.save();
               // const otherUsers = usersDB.users.filter(person => person.username !== foundUser.username);
               // const currentUser = { ...foundUser, refreshToken };
               // usersDB.setUsers([...otherUsers, currentUser]);
@@ -127,9 +128,32 @@ const userSignOut = async (req, res) => {
     res.sendStatus(204);
 }
 
-const getAllUsers = async (req,res) => {
-    const id = 1;
-}
+
+const getDetailsOfUser = async (req, res) => {
+  const userId = req.params.id;
+  console.log("Inside getDetailsOfUser");
+
+  try {
+    const donorData = await MedInfo.aggregate([
+      {
+        $match: { user_id: userId } 
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'email',
+          foreignField: 'email', 
+          as: 'userDetails'
+        }
+      }
+    ]);
+
+    res.json(donorData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while fetching donor data.' });
+  }
+};
 
 
-module.exports = {userRegister,userSignIn,userSignOut};
+module.exports = {userRegister,userSignIn,userSignOut,getDetailsOfUser};
