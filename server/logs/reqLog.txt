@@ -620,3 +620,14 @@
 20231010	00:34:36	ad35a70f-a2a1-4991-a31c-5d6075416e51	GET	http://localhost:3000	/admin/admininfo
 20231010	00:34:36	150d15c7-9162-493f-b329-07f0edead407	GET	http://localhost:3000	/admin/admininfo
 20231010	00:37:03	e3f49a55-4089-40bc-8c8a-c806733a4312	GET	http://localhost:3000	/user/sign_out
+20231010	19:15:30	0a86a7f7-8fe3-4436-b208-c122b69818df	GET	http://localhost:3000	/admin/admininfo
+20231010	19:16:39	0f74e1a5-48e5-4895-bf6a-1ec223700473	GET	http://localhost:3000	/admin/admininfo
+20231010	19:16:39	71900192-f74a-4f97-9366-524416f5d0e9	GET	http://localhost:3000	/admin/admininfo
+20231010	19:18:21	2ec0c96f-008f-4534-8656-b9b9cc300faa	GET	http://localhost:3000	/refresh
+20231010	19:18:21	ae289473-de98-4dbc-a1ec-43f2154789a1	GET	http://localhost:3000	/refresh
+20231010	19:18:22	5cba3ea9-5dde-4325-aacc-711c108d7421	GET	http://localhost:3000	/admin/admininfo
+20231010	19:18:22	b6613af5-ddbb-4c11-802c-50c28f83253f	GET	http://localhost:3000	/admin/admininfo
+20231010	19:19:11	216fdefc-dcef-43cc-b930-7c883015a159	GET	http://localhost:3000	/admin/admininfo
+20231010	19:19:17	0f55e79b-c500-4aad-9a38-3459bda8bf67	GET	http://localhost:3000	/admin/admininfo
+20231010	19:19:29	f020b515-05d9-415c-a595-d8b9d13c59af	GET	http://localhost:3000	/admin/admininfo
+20231010	19:20:26	0487d6fd-792a-4829-8189-ca2bd0c1d05b	GET	http://localhost:3000	/admin/admininfo

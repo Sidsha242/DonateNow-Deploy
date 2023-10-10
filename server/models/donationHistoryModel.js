@@ -16,7 +16,7 @@ const DonationHistoryModel = mongoose.Schema({
         required: true
     },
     donationType: {
-        type: ['plasma','platelets','red cells','whole blood'],
+        type: ['plasma','platelets','red_cells','whole_blood'],
         required: true
     },
 });
