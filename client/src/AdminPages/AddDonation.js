@@ -2,7 +2,6 @@ import React from 'react'
 import SearchBar from '../Components/SearchBar'
 import { useState, useEffect } from 'react';
 import axios from '../axios';
-import { useAuth } from '../Hooks/useAuth';
 import { Popover } from '@headlessui/react';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -19,7 +18,6 @@ const ADMIN_INFO_URL = '/admin/admininfo';
 
 const AddDonation = () => 
 {
-  const auth = useAuth();
   const [exp_arr, set_exp_arr] = useState([]);
   const [obj, setobj] = useState({});
   const [dondate, setDondate] = useState('');
@@ -95,27 +93,27 @@ const AddDonation = () =>
        
         <div className='mt-3'>
         <FormControl>
-        <FormLabel id="demo-radio-buttons-group-label">Donation Type</FormLabel>
-       <RadioGroup
-          aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue="Whole"
-          name="radio-buttons-group"
-         >
-        <FormControlLabel value="whole_blood" control={<Radio />} label="Whole Blood" />
-        <FormControlLabel value="red_cells" control={<Radio />} label="Red Cells" />
-        <FormControlLabel value="platelets" control={<Radio />} label="Platelets" />
-        <FormControlLabel value="plasma" control={<Radio />} label="Plasma" />
-      </RadioGroup>
-    </FormControl>
-          </div>
-          <div className='pb-2'>
+          <FormLabel id="demo-radio-buttons-group-label">Donation Type</FormLabel>
+          <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            defaultValue="Whole"
+            name="radio-buttons-group"
+          >
+            <FormControlLabel value="whole_blood" control={<Radio />} label="Whole Blood" />
+            <FormControlLabel value="red_cells" control={<Radio />} label="Red Cells" />
+            <FormControlLabel value="platelets" control={<Radio />} label="Platelets" />
+            <FormControlLabel value="plasma" control={<Radio />} label="Plasma" />
+          </RadioGroup>
+        </FormControl>
+        </div>
+        <div className='pb-2'>
           <h1>Date of Donation:</h1>
           <DatePicker selected={dondate} onChange={(date) => setDondate(date)} />
           </div>
           <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5">
                 Confirm Donation
           </button>
-          </div>
+        </div>
       </div>
     </div>
   )

@@ -1,21 +1,15 @@
 
 import React from 'react'
 import { useState, useEffect } from 'react';
-import { PieChart } from '@mui/x-charts/PieChart';
+import { PieChart , pieArcLabelClasses } from '@mui/x-charts/PieChart';
 import axios from '../axios';
 
 const ADMIN_INFO_URL = '/admin/admininfo';
 
 const AdminDash = () => {
 
-    var hash = new Object();
-
     const [exp_arr, set_exp_arr] = useState([]);
-
     const [piedata, setpiedata] = useState([]);
-
-    const labels = []
-    const datasets = []
 
     const data02 = [
       { name: "Group A", value: 2400 },
@@ -25,8 +19,6 @@ const AdminDash = () => {
       { name: "Group E", value: 3908 },
       { name: "Group F", value: 4800 }
     ];
-
-
 
 
     useEffect(() => {
@@ -45,30 +37,40 @@ const AdminDash = () => {
     <>
     <div className='p-5'>
     <h1 className='font-bold text-4xl'>Admin page</h1>
-            <div>
-                  <PieChart
-                  series={[
-                    {
-                      outerRadius: 80,
+      <div>
+          <PieChart
+            series={[
+              {
+                arcLabel: (item) => `${item.label} (${item.value})`,
+                arcLabelMinAngle: 45,
+                outerRadius: 150,
+                data: piedata,
+                highlightScope: { faded: 'global', highlighted: 'item' },
+                faded: { innerRadius: 5, additionalRadius: -5 },
+              },
+            ]}
+            sx={{
+              [`& .${pieArcLabelClasses.root}`]: {
+                fill: 'white',
+                fontWeight: 'bold',
+              },
+            }}
+            colors={['red', 'blue', 'green']}
+            height={300}
+            legend={{ hidden: true }}
+          />
+          <h1 className='font-bold text-2xl mt-10'>Users:</h1>
+          <div className='ml-20 pt-10 pb-20 overflow-scroll' >
 
-                      data: piedata,
-                    },
-                  ]}
-                  height={300}
-                  legend={{ hidden: true }}
-                />
-            <h1 className='font-bold text-2xl mt-10'>Users:</h1>
-            <div className='ml-20 pt-10 pb-20 overflow-scroll' >
+            {exp_arr.map((id) => (
+                <AdminCard state={id} username={id?.username} email={id?.email} createdAt={id?.createdAt} bloodgrp={id.usersdetails[0]?.bldgrp} phonenum={id?.phonenum}/>
+            ))}
 
-                      {exp_arr.map((id) => (
-                          <AdminCard state={id} username={id?.username} email={id?.email} createdAt={id?.createdAt} bloodgrp={id.usersdetails[0]?.bldgrp} phonenum={id?.phonenum}/>
-                      ))}
+          </div>
 
-            </div>
-            
       </div>
-      </div>
-      </>
+    </div>
+    </>
   )
 }
 
