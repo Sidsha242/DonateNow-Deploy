@@ -13,7 +13,7 @@ const Navbar = () => {
     const { auth } = useAuth();
 
     useEffect(()=>{
-        if(auth?.token !== undefined)
+        if(auth?.accessToken !== undefined)
         {
             console.log(auth);
             setLoggedIn(true);

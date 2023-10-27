@@ -2,13 +2,10 @@
 const mongoose = require("mongoose");
 
 const MedInfoSchema = mongoose.Schema({
-  user_id: {
+  donor_id: {
     type: String,
-    required: true
-  },
-  email : {
-    type: String,
-    required: true
+    required: true,
+    unique: true
   },
   bldgrp: {
     type: String,
@@ -19,7 +16,19 @@ const MedInfoSchema = mongoose.Schema({
     min: 18, max: 65,
     required: true
   },
-  
+  sex: {
+    type: String,
+    enum: ['Male','Female','Other'],
+    required: true
+  },
+  // lastDonationDate: {
+  //   type: Date,
+  //   required: true
+  // },
+  // medicalConditions: {
+  //   type: [String],
+  //   required: true
+  // },
 });
 
 

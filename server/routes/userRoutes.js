@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router()
 jwt = require('jsonwebtoken'),
 bcrypt = require('bcrypt')
-const config = require("../config");
+const config = require("../config.js");
 require("dotenv").config();
 
 const userController = require("../controllers/usersController");

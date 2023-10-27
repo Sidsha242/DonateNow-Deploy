@@ -15,12 +15,12 @@ const useRefreshToken = () => {
             console.log("prev = "+JSON.stringify(prev));
             return { 
                 ...prev,
-                id: response.data.id,
+                donor_id: response.data.donor_id,
                 role: response.data.role, 
-                token: response.data.token
+                accessToken: response.data.accessToken
             }
         });
-        return response.data.token;
+        return response.data.accessToken;
     }
     return refresh;
 };

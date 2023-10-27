@@ -3,7 +3,7 @@ const User = require('../models/userModel');
 
 const handleRefreshToken = async (req, res) => {
     const cookies = req.cookies;
-    console.log(cookies);
+    // console.log(cookies);
     if (!cookies?.jwt) return res.sendStatus(401);  //401 - Unauthorized
     const refreshToken = cookies?.jwt;
 
@@ -14,19 +14,20 @@ const handleRefreshToken = async (req, res) => {
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
         (err, decoded) => {
-            if (err || foundUser.id !== decoded.id) return res.sendStatus(403);
+            if (err || foundUser.donor_id !== decoded.donor_id) return res.sendStatus(403);
             const role = foundUser?.role;
+            console.log("role: "+role);
             const accessToken = jwt.sign(
                 { 
                     "UserInfo": {
-                        "id": decoded.id,
+                        "donor_id": decoded.donor_id,
                         "role": role 
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET,
                 { expiresIn: '30s' }
             );
-            res.json({ id:decoded.id, role: role, token: accessToken })
+            res.json({ donor_id:decoded.donor_id, role: role, accessToken: accessToken })
         }
     );
 }

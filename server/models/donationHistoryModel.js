@@ -1,12 +1,27 @@
 
 const mongoose = require("mongoose");
+const nanoid = require("nanoid");
 
-const DonationHistoryModel = mongoose.Schema({
-    email : {
+const DonationHistorySchema = mongoose.Schema({
+    donation_id: {
         type: String,
-        required: true
+        default: nanoid(6),
+        required: true,
+        unique: true
     },
-    bldAmount: {
+    donor_id: {
+        type: String,
+        required: true,
+    },
+    request_id: {
+        type: String,
+        required: true,
+    },
+    bldGrpDonated: {
+        type: String,
+        required: true,
+    },
+    amount_Donated: {
         type: Number,
         required: true,
     },
@@ -15,12 +30,9 @@ const DonationHistoryModel = mongoose.Schema({
         default: Date.now(),
         required: true
     },
-    donationType: {
-        type: ['plasma','platelets','red_cells','whole_blood'],
-        required: true
-    },
+    
 });
 
 
-module.exports = mongoose.model("medinfo", DonationHistoryModel);
+module.exports = mongoose.model("DonationHistory", DonationHistorySchema);
 

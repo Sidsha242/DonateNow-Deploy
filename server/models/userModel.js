@@ -1,7 +1,14 @@
 
 const mongoose = require("mongoose");
+const nanoid = require("nanoid");
 
 const UserSchema = mongoose.Schema({
+  donor_id: {
+    type: String,
+    default: nanoid(6),
+    required: true,
+    unique: true
+  },
   username: {
     type: String,
     required: true
@@ -23,7 +30,7 @@ const UserSchema = mongoose.Schema({
     type: Date,
     default: Date.now()
   },
-  verified: {
+  isVerified: {
     type: Boolean,
     default: false
   },

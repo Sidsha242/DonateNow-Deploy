@@ -4,20 +4,20 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const path = require("path");
-const config = require("./config");
+const config = require("./config.js");
 const bodyParser = require("body-parser");
 const jsonwebtoken = require("jsonwebtoken");
 const cookieParser = require('cookie-parser');
 const mongoose = require("mongoose");
 
-const connectDB = require('./config/dbConn');
+const connectDB = require('./config/dbConn.js');
 const corsOptions = require('./config/corsOptions');
 const verifyJWT = require('./middleware/verifyJWT');
 const { logger } = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
 const credentials = require('./middleware/credentials');
 
-const { accountSID, authToken } = require('./config');
+const { accountSID, authToken } = require('./config.js');
 const client = require('twilio')(accountSID,authToken);
 
 const PORT = 3031;
