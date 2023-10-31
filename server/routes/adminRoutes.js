@@ -9,6 +9,8 @@ router.get("/adminget", adminController.getAllUsersEntirely); //removed verifyJW
 
 router.get("/admininfo", adminController.adminInfo); //removed verifyJWT
 
-router.post("/sendMsg", adminController.sendMsg);
+router.get("/sendMsg", adminController.sendMsg);
+
+router.post("/addDonationHistory" , adminController.addDonationHistory);
 
 module.exports = router;

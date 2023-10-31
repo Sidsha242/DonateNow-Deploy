@@ -1,5 +1,7 @@
 const MedInfo = require('../models/medInfoModel'); 
 const User = require('../models/userModel'); 
+const DonationHistory = require('../models/donationHistoryModel');
+
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -145,26 +147,91 @@ const getDetailsOfUser = async (req, res) => {
   console.log("Inside getDetailsOfUser");
 
   try {
-    const donorData = await MedInfo.aggregate([
+    const donorData = await User.aggregate([
       {
-        $match: { user_id: userId } 
+        $match: { donor_id: userId }
       },
       {
         $lookup: {
-          from: 'users',
-          localField: 'email',
-          foreignField: 'email', 
-          as: 'userDetails'
+          from: 'medinfos',
+          localField: 'donor_id',
+          foreignField: 'donor_id',
+          as: 'medInfo'
+        }
+      },
+      {
+        $unwind: '$medInfo'
+      },
+      {
+        $project: {
+          _id: 0, 
+          donor_id: 1,
+          username: 1,
+          email: 1,
+          phonenum: 1,
+          createdAt: 1,
+          isVerified: 1,
+          role: 1,
+          refreshToken: 1,
+          'medInfo.bldgrp': 1,
+          'medInfo.age': 1,
+          'medInfo.sex': 1
         }
       }
     ]);
 
-    res.json(donorData);
+    if (donorData.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json(donorData[0]);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'An error occurred while fetching donor data.' });
   }
 };
 
+const getAllDonationsofUser = async (req, res) => {
+  const userId = req.params.id;
+  console.log("Inside getAllDonationsofUser");
 
-module.exports = {userRegister,userSignIn,userSignOut,getDetailsOfUser};
+  try {
+    const donorDonationData = await DonationHistory.find({ donor_id: userId });
+    
+    res.json(donorDonationData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while fetching donor data.' });
+  }
+};
+
+const getTotalBloodDonatedByUser = async (req, res) => {
+  const userId = req.params.id;
+  console.log('Inside getTotalBloodDonatedByUser');
+
+  try {
+    const totalDonatedBlood = await DonationHistory.aggregate([
+      {
+        $match: { donor_id: userId }, // Match rows with the specified donor_id
+      },
+      {
+        $group: {
+          _id: null, // Group all matched rows
+          totalAmountDonated: { $sum: '$amount_Donated' }, // Calculate the sum of amount_Donated
+        },
+      },
+    ]);
+
+    if (totalDonatedBlood.length > 0) {
+      res.json({ totalAmountDonated: totalDonatedBlood[0].totalAmountDonated });
+    } else {
+      res.json({ totalAmountDonated: 0 }); // No matching records, so the total is 0
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while calculating total donated blood.' });
+  }
+};
+
+
+module.exports = {userRegister,userSignIn,userSignOut,getDetailsOfUser,getAllDonationsofUser,getTotalBloodDonatedByUser};
