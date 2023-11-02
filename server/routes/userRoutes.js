@@ -42,4 +42,8 @@ router.route("/addMedInfo")
 
 router.get("/getDetailsOfUser/:id", userController.getDetailsOfUser);
 
+router.get("/getAllDonationsofUser/:id", userController.getAllDonationsofUser);
+
+router.get("/getTotalBloodDonatedByUser/:id", userController.getTotalBloodDonatedByUser);
+
 module.exports = router;
