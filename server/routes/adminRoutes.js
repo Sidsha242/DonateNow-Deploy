@@ -13,4 +13,6 @@ router.get("/sendMsg", adminController.sendMsg);
 
 router.post("/addDonationHistory" , adminController.addDonationHistory);
 
+router.post("/addRequests" , adminController.addRequests);
+
 module.exports = router;

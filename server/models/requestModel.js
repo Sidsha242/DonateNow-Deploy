@@ -1,11 +1,9 @@
 
 const mongoose = require("mongoose");
-const nanoid = require("nanoid");
 
 const RequestSchema = mongoose.Schema({
     request_id: {
         type: String,
-        default: nanoid(6),
         unique: true,
         required: true
     },
@@ -23,6 +21,7 @@ const RequestSchema = mongoose.Schema({
     },
     isDone: {
         type: Boolean,
+        default: false,
         required: true
     },
 });

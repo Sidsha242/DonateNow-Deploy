@@ -8,6 +8,7 @@ require("dotenv").config();
 
 const userController = require("../controllers/usersController");
 const medInfoController = require("../controllers/medInfoController");
+const requestController = require("../controllers/requestController");
 const verifyJWT = require("../middleware/verifyJWT");
 
 
@@ -45,5 +46,7 @@ router.get("/getDetailsOfUser/:id", userController.getDetailsOfUser);
 router.get("/getAllDonationsofUser/:id", userController.getAllDonationsofUser);
 
 router.get("/getTotalBloodDonatedByUser/:id", userController.getTotalBloodDonatedByUser);
+
+router.get("/getRequests", requestController.getRequests);
 
 module.exports = router;

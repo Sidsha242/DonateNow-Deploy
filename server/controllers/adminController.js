@@ -2,6 +2,9 @@ const User = require("../models/userModel");
 const MedInfo = require ("../models/medInfoModel");
 const mongoose = require("mongoose");
 const DonationHistory = require('../models/donationHistoryModel');
+const RequestInfo = require('../models/requestInfoModel');
+const Request = require('../models/requestModel');
+
 const db = mongoose.connection;
 
 const getAllUsersEntirely = async (req, res) => {
@@ -112,7 +115,7 @@ const addDonationHistory = async (req, res) => {
     await newDonation.save();
 
     const medinfo = await MedInfo.findOne({ donor_id });
-    
+
     if (medinfo) {
       medinfo.totalAmountDonated += amount_Donated;
       medinfo.lastDonationDate =newDonation.dateOfDonation;
@@ -121,6 +124,16 @@ const addDonationHistory = async (req, res) => {
       console.error("MedInfo document not found for donor_id:", donor_id);
     }
 
+    const requestinfo = await Request.findOne({ request_id });
+
+    if (requestinfo) {
+      requestinfo.amount_Remaining -= amount_Donated;
+      await requestinfo.save();
+    } else {
+      console.error("requestinfo document not found for request_id:", request_id);
+    }
+
+
     res.status(201).json({result: newDonation, message: 'Donation history entry added successfully' });
   } catch (error) {
     console.error(error);
@@ -128,4 +141,34 @@ const addDonationHistory = async (req, res) => {
   }
 };
 
-module.exports = {getAllUsersEntirely, adminInfo, sendMsg, addDonationHistory};
+const addRequests = async (req, res) => {
+  try {
+    const { bldGrpRequired, amount_Required, amount_Remaining, endDate_of_Request, donationType, emergencyLevel } = req.body;
+
+    const newRequestInfo = new RequestInfo({
+      endDate_of_Request,
+      donationType,
+      emergencyLevel
+    });
+
+    await newRequestInfo.save();
+    const request_id = newRequestInfo.request_id;
+
+    const newRequest = new Request({
+      request_id,
+      bldGrpRequired,
+      amount_Required,
+      amount_Remaining
+    });
+
+    await newRequest.save();
+
+    res.status(201).json({ result: newRequest, message: 'New request entry added successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while adding the request entry' });
+  }
+};
+
+
+module.exports = {getAllUsersEntirely, adminInfo, sendMsg, addDonationHistory,addRequests};
