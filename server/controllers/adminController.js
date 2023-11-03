@@ -111,6 +111,16 @@ const addDonationHistory = async (req, res) => {
 
     await newDonation.save();
 
+    const medinfo = await MedInfo.findOne({ donor_id });
+    
+    if (medinfo) {
+      medinfo.totalAmountDonated += amount_Donated;
+      medinfo.lastDonationDate =newDonation.dateOfDonation;
+      await medinfo.save();
+    } else {
+      console.error("MedInfo document not found for donor_id:", donor_id);
+    }
+
     res.status(201).json({result: newDonation, message: 'Donation history entry added successfully' });
   } catch (error) {
     console.error(error);

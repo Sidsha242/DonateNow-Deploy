@@ -21,14 +21,14 @@ const MedInfoSchema = mongoose.Schema({
     enum: ['Male','Female','Other'],
     required: true
   },
-  // lastDonationDate: {
-  //   type: Date,
-  //   required: true
-  // },
-  // medicalConditions: {
-  //   type: [String],
-  //   required: true
-  // },
+  lastDonationDate: {
+    type: Date,
+    default: null, // Initialize to null
+  },
+  totalAmountDonated: {
+    type: Number,
+    default: 0, // Initialize to 0
+  },
 });
 
 
