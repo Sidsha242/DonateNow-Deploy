@@ -175,7 +175,9 @@ const getDetailsOfUser = async (req, res) => {
           refreshToken: 1,
           'medInfo.bldgrp': 1,
           'medInfo.age': 1,
-          'medInfo.sex': 1
+          'medInfo.sex': 1,
+          'medInfo.lastDonationDate':1,
+          'medInfo.totalAmountDonated':1,
         }
       }
     ]);

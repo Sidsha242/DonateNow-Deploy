@@ -1,8 +1,11 @@
 const mongoose = require("mongoose");
+const nanoid = require("nanoid");
+
 
 const RequestInfoSchema = mongoose.Schema({
     request_id: {
         type: String,
+        default: nanoid(6),
         required: true,
         unique: true,
     },
@@ -17,12 +20,12 @@ const RequestInfoSchema = mongoose.Schema({
     },
     donationType: {
         type: String,
-        enum: ['Whole blood', 'Single donor plasma', 'Granulocytes'],
+        enum: ['Whole_blood', 'Single_donor_plasma', 'Granulocytes'],
         required: true
     },
     emergencyLevel: {
         type: String,
-        enum: ['Mass Casualty','Immediate','Normal Drive'],
+        enum: ['Mass_Casualty','Immediate','Normal_Drive'],
         required: true
     },
     // location: {

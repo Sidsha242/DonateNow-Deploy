@@ -1,9 +1,16 @@
 import React from 'react'
 import { useState } from 'react';
 import axios from '../axios';
-// import MenuItem from '@mui/material/MenuItem';
-// import FormControl from '@mui/material/FormControl';
-// import Select from '@mui/material/Select';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import { InputLabel } from '@mui/material';
 
 const MSG_URL = '/admin/sendMsg';
 
@@ -11,6 +18,7 @@ const SendMessage = () => {
 
     const [bldgrp, setBldGrp] = useState(''); 
     const [smsText, setSmsText] = useState('');
+    const [enddate, setEndate] = useState('');
 
   const sendMessage = () =>{
     console.log('Inside send message');
@@ -32,7 +40,7 @@ const SendMessage = () => {
     const value = e.target.value;
     const checked = e.target.checked;
     // console.log(value, checked);
-    // console.log(bloodArray);
+    console.log(bloodArray);
     if(checked){
       setBloodArray([...bloodArray, value]);
     }else{
@@ -48,12 +56,12 @@ const SendMessage = () => {
   return (
     <div className='p-10 h-screen'>
 
-    <h1 className='text-2xl font-bold'>Send message</h1>
+    <h1 className='text-2xl font-bold'>Create Request</h1>
 
     <form onSubmit={handleSubmit} className='space-y-4 '>
       <div>
         <label htmlFor='blood-group' className='block mb-3 items-start font-bold mt-2'>Blood Group:</label>
-          {/* <FormControl fullWidth>
+          <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Blood Group</InputLabel>
             <Select
                 id="blood-group"
@@ -70,7 +78,7 @@ const SendMessage = () => {
                 <MenuItem value={'AB+'}>AB+</MenuItem>
                 <MenuItem value={'AB-'}>AB-</MenuItem>
             </Select>
-          </FormControl> */}
+          </FormControl> 
 
           {/* <select id="blood-group" value={bldgrp} onChange={(e) => setBldGrp(e.target.value)} className='block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400'>
             <option value="A+">A+</option>
@@ -82,7 +90,7 @@ const SendMessage = () => {
             <option value="AB+">AB+</option>
             <option value="AB-">AB-</option>
           </select> */}
-
+{/* 
           <div className="mb-4">
             <input type="checkbox" value="A+" onChange={handleChange}></input>
             <label style={{"color": "black"}}>A+</label> &nbsp;
@@ -100,16 +108,58 @@ const SendMessage = () => {
             <label style={{"color": "black"}}>AB+</label> &nbsp;
             <input type="checkbox" value="AB-" onChange={handleChange}></input> 
             <label style={{"color": "black"}}>AB-</label> &nbsp;
-          </div>
+          </div> */}
 
           <h1 className='font-bold text-lg'>Blood group selected:{bldgrp}</h1>
-          <div className='mt-5'>
-          <textarea id="message" rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" placeholder="Type sms here.." 
+          
+          <label for="first_name" class="block mb-2 text-sm font-lg font-bold">Amount of blood to be donated:(in ml)</label>
+            <input type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 " placeholder="100" required></input>
+           
+            <h1>End Date of Donation:</h1>
+          <DatePicker selected={enddate} onChange={(date) => setEndate(date)} />
+
+          <div>
+          <FormControl>
+          <FormLabel id="demo-radio-buttons-group-label">Donation Type</FormLabel>
+          <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            defaultValue="whole_blood"
+            name="radio-buttons-group"
+          >
+            <FormControlLabel value="Whole_blood" control={<Radio />} label="Whole blood" />
+            <FormControlLabel value="Single_donor_plasma" control={<Radio />} label="Single donor plasma" />
+            <FormControlLabel value="Granulocytes" control={<Radio />} label="Granulocytes" />
+          </RadioGroup>
+        </FormControl>
+        </div>
+        <div className='mt-5'>
+        <FormControl>
+          <FormLabel id="demo-radio-buttons-group-label">Emergency Level</FormLabel>
+          <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            defaultValue="Whole"
+            name="radio-buttons-group"
+          >
+            <FormControlLabel value="Mass_Casualty" control={<Radio />} label="Mass_Casualty" />
+            <FormControlLabel value="Immediate" control={<Radio />} label="Immediate" />
+            <FormControlLabel value="Normal_Drive" control={<Radio />} label="Normal_Drive" />
+          </RadioGroup>
+        </FormControl>
+        </div>
+
+        <button type="submit" className="w-full mt-5 text-white bg-emerald-400 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2.5 py-2.5 text-center" onClick={sendMessage}>Create Request</button>
+
+        <h1 className='text-2xl font-bold'>Send Message</h1>
+        <div className='mt-5'>
+          <textarea id="message" rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Type sms here.." 
           value={smsText} onChange={(e) => setSmsText(e.target.value)}></textarea>
           </div>
+
           <button type="submit" className="w-full mt-5 text-white bg-emerald-400 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2.5 py-2.5 text-center" onClick={sendMessage}>Send Message</button>
       </div>
     </form>
+    <div className='mt-10'>
+    </div>
     </div>
   )
 }
