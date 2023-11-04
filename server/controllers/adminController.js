@@ -1,11 +1,13 @@
 const User = require("../models/userModel");
-const MedInfo = require ("../models/medInfoModel");
+const MedInfo = require("../models/medInfoModel");
 const mongoose = require("mongoose");
-const DonationHistory = require('../models/donationHistoryModel');
-const RequestInfo = require('../models/requestInfoModel');
-const Request = require('../models/requestModel');
+const DonationHistory = require("../models/donationHistoryModel");
+const RequestInfo = require("../models/requestInfoModel");
+const Request = require("../models/requestModel");
+const config = require("../config.js");
 
 const db = mongoose.connection;
+const client = require("twilio")(config.accountSID, config.authToken);
 
 const getAllUsersEntirely = async (req, res) => {
   try {
@@ -23,33 +25,40 @@ const getAllUsersEntirely = async (req, res) => {
     res.json(usersWithMedInfo);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'An error occurred while fetching user data with MedInfo.' });
+    res.status(500).json({
+      error: "An error occurred while fetching user data with MedInfo.",
+    });
   }
 };
 
-const adminInfo = async(req, res) => {
-  const result = await db.collection('users').aggregate([
-    {
-      $lookup: {
-        from: 'medinfos',
-        localField: 'email',
-        foreignField: 'email',
-        as: 'usersdetails'
-      }
-    }
-  ]).toArray()
-  const bloodGroupMap = new Map(
-  );
-  bloodGroupMap.set('A+', 0)
-  bloodGroupMap.set('A-', 0)
-  bloodGroupMap.set('B+', 0)
-  bloodGroupMap.set('B-', 0)
-  bloodGroupMap.set('AB+', 0)
-  bloodGroupMap.set('AB-', 0)
+const adminInfo = async (req, res) => {
+  const result = await db
+    .collection("users")
+    .aggregate([
+      {
+        $lookup: {
+          from: "medinfos",
+          localField: "donor_id",
+          foreignField: "donor_id",
+          as: "usersdetails",
+        },
+      },
+    ])
+    .toArray();
+  const bloodGroupMap = new Map();
+  bloodGroupMap.set("A+", 0);
+  bloodGroupMap.set("A-", 0);
+  bloodGroupMap.set("B+", 0);
+  bloodGroupMap.set("B-", 0);
+  bloodGroupMap.set("AB+", 0);
+  bloodGroupMap.set("AB-", 0);
 
-  result.forEach(entry => {
-    bloodGroupMap.set(entry?.usersdetails[0]?.bldgrp,bloodGroupMap.get(entry?.usersdetails[0]?.bldgrp) + 1)
-  })
+  result.forEach((entry) => {
+    bloodGroupMap.set(
+      entry?.usersdetails[0]?.bldgrp,
+      bloodGroupMap.get(entry?.usersdetails[0]?.bldgrp) + 1
+    );
+  });
 
   const jsonObject = {};
   for (let [key, value] of bloodGroupMap) {
@@ -57,48 +66,57 @@ const adminInfo = async(req, res) => {
     const num = parseInt(`${value}`);
     jsonObject[bld] = num;
   }
- 
-  let op = Object.entries(jsonObject)
-         .map(([ label, value ] ) => ({ label, value }))
-  console.log(op)
-  res.json({result : result, piedata: op});
-}
 
-const sendMsg = async (req,res) => {
+  let op = Object.entries(jsonObject).map(([label, value]) => ({
+    label,
+    value,
+  }));
+  console.log(op);
+  res.json({ result: result, piedata: op });
+};
+
+const sendMsg = async (req, res) => {
   const BloodGroup = req.body.bldgrp;
   const txtMsg = req.body.smsText;
   try {
     // const fourMonthsAgo = new Date();
     // fourMonthsAgo.setMonth(fourMonthsAgo.getMonth() - 4);
 
-    const usersWithBloodGroup = await MedInfo.find({ bldgrp: { $in: BloodGroup } });
+    console.log(BloodGroup);
+    const usersWithBloodGroup = await MedInfo.find({
+      bldgrp: { $in: BloodGroup },
+    });
+    console.log(usersWithBloodGroup);
 
     // Collect their phone numbers
-    const phoneNum_arr = usersWithBloodGroup.map(user => user.donor_id);
+    const phoneNum_arr = usersWithBloodGroup.map((user) => user.donor_id);
 
     // Now you have an array of donor_ids, you need to fetch their phone numbers from the User model
-    const phoneNumbers = await User.find({ donor_id: { $in: phoneNum_arr } }, "phonenum");
+    const phoneNumbers = await User.find(
+      { donor_id: { $in: phoneNum_arr } },
+      "phonenum"
+    );
+    console.log(phoneNumbers);
 
     // Extract phone numbers from the result
-    const phoneNumbersArr = phoneNumbers.map(user => user.phonenum);
-    console.log(phoneNumbersArr)
-    // for (let k = 0; k < phoneNumbersArr.length; k++) {
-    //   client.messages.create({
-    //     to: '+' + phoneNumbersArr[k],
-    //     from: '+19382536013',
-    //     body: txtMsg,
-    //   })
-    //   .then((message) => console.log('Message sent to', phoneNumbersArr[k]));
-    // }
+    const phoneNumbersArr = phoneNumbers.map((user) => user.phonenum);
+    console.log(phoneNumbersArr);
+    for (let k = 0; k < phoneNumbersArr.length; k++) {
+      client.messages
+        .create({
+          to: "+" + phoneNumbersArr[k],
+          from: "+19382536013",
+          body: txtMsg,
+        })
+        .then((message) => console.log("Message sent to", phoneNumbersArr[k]));
+    }
 
-    res.status(200).json({ message: 'Messages sent successfully' });
+    res.status(200).json({ message: "Messages sent successfully" });
   } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: 'An error occurred while sending messages' });
+    console.error("Error:", error);
+    res.status(500).json({ error: "An error occurred while sending messages" });
   }
-}
-
-
+};
 
 const addDonationHistory = async (req, res) => {
   try {
@@ -118,7 +136,7 @@ const addDonationHistory = async (req, res) => {
 
     if (medinfo) {
       medinfo.totalAmountDonated += amount_Donated;
-      medinfo.lastDonationDate =newDonation.dateOfDonation;
+      medinfo.lastDonationDate = newDonation.dateOfDonation;
       await medinfo.save();
     } else {
       console.error("MedInfo document not found for donor_id:", donor_id);
@@ -130,25 +148,39 @@ const addDonationHistory = async (req, res) => {
       requestinfo.amount_Remaining -= amount_Donated;
       await requestinfo.save();
     } else {
-      console.error("requestinfo document not found for request_id:", request_id);
+      console.error(
+        "requestinfo document not found for request_id:",
+        request_id
+      );
     }
 
-
-    res.status(201).json({result: newDonation, message: 'Donation history entry added successfully' });
+    res.status(201).json({
+      result: newDonation,
+      message: "Donation history entry added successfully",
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'An error occurred while adding the donation history entry' });
+    res.status(500).json({
+      error: "An error occurred while adding the donation history entry",
+    });
   }
 };
 
 const addRequests = async (req, res) => {
   try {
-    const { bldGrpRequired, amount_Required, amount_Remaining, endDate_of_Request, donationType, emergencyLevel } = req.body;
+    const {
+      bldGrpRequired,
+      amount_Required,
+      amount_Remaining,
+      endDate_of_Request,
+      donationType,
+      emergencyLevel,
+    } = req.body;
 
     const newRequestInfo = new RequestInfo({
       endDate_of_Request,
       donationType,
-      emergencyLevel
+      emergencyLevel,
     });
 
     await newRequestInfo.save();
@@ -158,17 +190,27 @@ const addRequests = async (req, res) => {
       request_id,
       bldGrpRequired,
       amount_Required,
-      amount_Remaining
+      amount_Remaining,
     });
 
     await newRequest.save();
 
-    res.status(201).json({ result: newRequest, message: 'New request entry added successfully' });
+    res.status(201).json({
+      result: newRequest,
+      message: "New request entry added successfully",
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'An error occurred while adding the request entry' });
+    res
+      .status(500)
+      .json({ error: "An error occurred while adding the request entry" });
   }
 };
 
-
-module.exports = {getAllUsersEntirely, adminInfo, sendMsg, addDonationHistory,addRequests};
+module.exports = {
+  getAllUsersEntirely,
+  adminInfo,
+  sendMsg,
+  addDonationHistory,
+  addRequests,
+};

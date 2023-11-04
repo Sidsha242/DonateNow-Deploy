@@ -13,8 +13,9 @@ const Dashboard = () => {
   const auth = useAuth();
 
   const [medData, setMedData] = useState("");
+  const [donations, setDonations] = useState([]);
 
-  const userID = auth?.auth?.id;
+  const userID = auth?.auth?.donor_id;
   console.log(auth);
   useEffect(() => {
     console.log("Fetching data for user_id:", userID); // Log user_id before making the request
@@ -32,11 +33,34 @@ const Dashboard = () => {
       .catch((error) => {
         console.error("Error fetching donor data:", error);
       });
-  }, [userID]); // Only run this effect when user_id changes
+  }, []); // Only run this effect when user_id changes
 
   console.log(medData);
-  const user = medData[0]?.userDetails[0];
-  const bldAmount = medData[0]?.bldAmount || 10;
+  const user = medData;
+  const bldAmount = medData?.medInfo?.totalAmountDonated || 0;
+  const lastDonated = medData?.medInfo?.lastDonationDate;
+
+  useEffect(() => {
+    async function fetchData() {
+      axios
+        .get(`http://localhost:3031/user/getAllDonationsofUser/${userID}`, {
+          headers: {
+            Authorization: `Bearer ${auth?.auth?.token}`,
+          },
+        })
+        .then((response) => {
+          console.log("got all donation history of the user");
+          console.log(response.data);
+          // const data = await response.json();
+          setDonations(response.data);
+          console.log(donations);
+        })
+        .catch((error) => {
+          console.error("Error fetching donation data:", error);
+        });
+    }
+    fetchData();
+  }, []); // Only run this effect when user_id changes
 
   return (
     <div>
@@ -57,7 +81,7 @@ const Dashboard = () => {
                   }}
                 >
                   <div className="text-white font-poppins text-2xl">
-                    25th September 2023
+                    {lastDonated}
                   </div>
                   <div className="text-slate-100">Last Donated</div>
                 </motion.div>
@@ -73,15 +97,17 @@ const Dashboard = () => {
                     ease: [0, 0.71, 0.2, 1.01],
                   }}
                 >
-                  <div className="grid grid-cols-2">
-                    <div className="text-white font-poppins text-2xl">
-                      Find a drive
+                  <a href="/feed">
+                    <div className="grid grid-cols-2">
+                      <div className="text-white font-poppins text-2xl">
+                        Find a Drive
+                      </div>
+                      <img src={img1} className="w-20 h-20 ml-20"></img>
                     </div>
-                    <img src={img1} className="w-20 h-20 ml-20"></img>
-                  </div>
+                  </a>
                 </motion.div>
               </div>
-              <div className="bg-red-500 rounded-md w-80 p-5 basis-1/3 ml-5 flex">
+              {/* <div className="bg-red-500 rounded-md w-80 p-5 basis-1/3 ml-5 flex">
                 <motion.div
                   className=""
                   initial={{ opacity: 0, scale: 0.5 }}
@@ -99,7 +125,7 @@ const Dashboard = () => {
                     <img src={img2} className="w-20 h-20 ml-20"></img>
                   </div>
                 </motion.div>
-              </div>
+              </div> */}
 
               <div></div>
             </div>
@@ -117,7 +143,7 @@ const Dashboard = () => {
                 </h1>
               </div>
               <div className="bg-[#F2EEDB] shadow w-min p-8 rounded-xl mx-auto">
-                <h1 className="text-9xl font-bold">AB+</h1>
+                <h1 className="text-9xl font-bold">{user?.medInfo?.bldgrp}</h1>
               </div>
             </div>
             <div>
@@ -127,8 +153,10 @@ const Dashboard = () => {
                   <div>
                     <TableHeader />
                     <hr className="bg-black h-2"></hr>
-                    <TableRow />
-                    <TableRow />
+                    {donations.map((donation, index) => (
+                      <TableRow key={index} donation={donation} />
+                    ))}
+                    <hr className="bg-black h-2"></hr>
                   </div>
                 </div>
                 <div>
@@ -159,27 +187,51 @@ const Dashboard = () => {
 
 export default Dashboard;
 
+// const TableHeader = () => {
+//   // {console.log(props)}
+//   return (
+//     <div>
+//       <div className="grid grid-cols-3 gap-4 font-bold text-lg flex pt-5 pb-5">
+//         <div>Donation Date</div>
+//         <div>Amount Donated</div>
+//         <div>Plasma/Platelets/Red cells/Whole blood</div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// const TableRow = () => {
+//   // {console.log(props)}
+//   return (
+//     <div>
+//       <div className="grid grid-cols-3 gap-4 text-md flex pl-3 pt-5 pb-5 font-poppins">
+//         <div>14/09/23</div>
+//         <div>500ml</div>
+//         <div>Plasma</div>
+//       </div>
+//     </div>
+//   );
+// };
+
 const TableHeader = () => {
-  // {console.log(props)}
   return (
     <div>
       <div className="grid grid-cols-3 gap-4 font-bold text-lg flex pt-5 pb-5">
         <div>Donation Date</div>
         <div>Amount Donated</div>
-        <div>Plasma/Platelets/Red cells/Whole blood</div>
+        <div>Donation Type</div>
       </div>
     </div>
   );
 };
 
-const TableRow = () => {
-  // {console.log(props)}
+const TableRow = ({ donation }) => {
   return (
     <div>
       <div className="grid grid-cols-3 gap-4 text-md flex pl-3 pt-5 pb-5 font-poppins">
-        <div>14/09/23</div>
-        <div>500ml</div>
-        <div>Plasma</div>
+        <div>{donation?.dateOfDonation}</div>
+        <div>{donation?.amount_Donated}</div>
+        <div>{donation?.donation_id}</div>
       </div>
     </div>
   );
