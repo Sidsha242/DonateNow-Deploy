@@ -14,4 +14,6 @@ router.post("/addDonationHistory", adminController.addDonationHistory);
 
 router.post("/addRequests", adminController.addRequests);
 
+router.get("/requestinfo", adminController.requestInfo);
+
 module.exports = router;

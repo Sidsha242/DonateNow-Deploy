@@ -2,12 +2,14 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 import axios from "../axios";
+import dateFormat from "dateformat";
 
 const ADMIN_INFO_URL = "/admin/admininfo";
 
 const AdminDash = () => {
   const [exp_arr, set_exp_arr] = useState([]);
   const [piedata, setpiedata] = useState([]);
+  const palette = ["red", "green", "blue", "yellow", "orange", "purple"];
 
   useEffect(() => {
     axios
@@ -64,7 +66,6 @@ const AdminDash = () => {
                 fontWeight: "bold",
               },
             }}
-            colors={["red", "blue", "green"]}
             height={300}
             legend={{ hidden: true }}
           />
@@ -95,8 +96,8 @@ const AdminCard = (props) => {
     <div className="bg-[#E3DEC6]">
       <div className="grid grid-cols-5 gap-9 font-bold text-md flex pl-3 pt-5 pb-5">
         <div>{props.username}</div>
-        <div>{props.email}</div>
-        <div>{props.createdAt}</div>
+        <div className="break-words">{props.email}</div>
+        <div>{dateFormat(props.createdAt, "mmmm dS, yyyy")}</div>
         <div>{props.bloodgrp}</div>
         <div>{props.phonenum}</div>
       </div>

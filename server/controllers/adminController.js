@@ -52,6 +52,8 @@ const adminInfo = async (req, res) => {
   bloodGroupMap.set("B-", 0);
   bloodGroupMap.set("AB+", 0);
   bloodGroupMap.set("AB-", 0);
+  bloodGroupMap.set("O+", 0);
+  bloodGroupMap.set("O-", 0);
 
   result.forEach((entry) => {
     bloodGroupMap.set(
@@ -67,12 +69,56 @@ const adminInfo = async (req, res) => {
     jsonObject[bld] = num;
   }
 
-  let op = Object.entries(jsonObject).map(([label, value]) => ({
+  const palette = [
+    "#0088FE",
+    "#00C49F",
+    "#FFBB28",
+    "#FF8042",
+    "#FF0000",
+    "#800080",
+    "#0000FF",
+    "#008000",
+  ];
+  let paletteCopy = [...palette];
+  function getRandomNonRepeating() {
+    if (paletteCopy.length === 0) {
+      paletteCopy = [...palette]; // reset the copy if all elements have been used
+    }
+    const randomIndex = Math.floor(Math.random() * paletteCopy.length);
+    const selectedElement = paletteCopy.splice(randomIndex, 1);
+    return selectedElement[0];
+  }
+
+  let op = Object.entries(jsonObject).map(([label, value, i]) => ({
     label,
     value,
+    color: getRandomNonRepeating(),
   }));
   console.log(op);
   res.json({ result: result, piedata: op });
+};
+
+const requestInfo = async (req, res) => {
+  try {
+    const requestsCollection = db.collection("requests");
+    const result = await requestsCollection
+      .aggregate([
+        {
+          $lookup: {
+            from: "requestinfos",
+            localField: "request_id",
+            foreignField: "request_id",
+            as: "requestdetails",
+          },
+        },
+      ])
+      .toArray();
+
+    res.json(result);
+  } catch (error) {
+    console.error("Error in /request-info route:", error);
+    res.status(500).send("Internal Server Error");
+  }
 };
 
 const sendMsg = async (req, res) => {
@@ -213,4 +259,5 @@ module.exports = {
   sendMsg,
   addDonationHistory,
   addRequests,
+  requestInfo,
 };
