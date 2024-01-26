@@ -92,7 +92,7 @@ const AddDonation = () => {
     //console.log(props)
     return (
       <div className="bg-[#E3DEC6] h-fill">
-        <div className="grid grid-cols-5 font-bold text-sm flex pl-2 pt-6 pb-6">
+        <div className="grid grid-cols-5 font-bold text-sm pl-2 pt-6 pb-6">
           <div>{props.donor_id}</div>
           <div>{props.username}</div>
           <div>{props.bloodgrp}</div>
@@ -118,7 +118,7 @@ const AddDonation = () => {
     //console.log(props)
     return (
       <div className="bg-[#E3DEC6] h-fill">
-        <div className="grid grid-cols-5 font-bold text-sm flex pl-2 pt-6 pb-6">
+        <div className="grid grid-cols-5 font-bold text-sm pl-2 pt-6 pb-6">
           <div>{props.request_id}</div>
           <div>{props.bldGrpRequired}</div>
           <div className="pr-10">

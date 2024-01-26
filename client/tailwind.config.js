@@ -1,25 +1,10 @@
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
   content: [
-    './src/Pages/Login.js',
-    "./src/Pages/Register.js",
-    "./src/Pages/Home.js",
-    "./src/Components/Navbar.js",
-    "./src/Pages/MedInfo.js",
-    "./src/Pages/PhoneOTP.js",
-    "./src/Pages/Dashboard.js",
-    "./src/Pages/Feed.js",
-    "./src/Pages/Dashboard.js",
-    "./src/Pages/Admin.js",
-    "./src/Components/NewDrive.js",
-    "./src/Pages/Layout.js",
-    "./src/Pages/Unauthorized.js",
-    "./src/Components/FeedCard.js",
-    "./src/Pages/LinkPage.js",
-    "./src/Components/AdminNavbar.js",
-    "./src/AdminPages/AdminDash.js",
-    "./src/AdminPages/SendMessage.js",
-    "./src/AdminPages/AddDonation.js"
+    './src/Pages/**/*.{html,js}',
+    './src/Components/**/*.{html,js}',
+    './src/AdminPages/**/*.{html,js}',
   ],
   theme: {
     extend: {

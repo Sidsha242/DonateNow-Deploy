@@ -13,6 +13,7 @@ import Select from "@mui/material/Select";
 import { InputLabel } from "@mui/material";
 import { create } from "@mui/material/styles/createTransitions";
 
+
 const MSG_URL = "/admin/sendMsg";
 
 const SendMessage = () => {
@@ -22,16 +23,18 @@ const SendMessage = () => {
   const [donationType, setDonationType] = useState("");
   const [emergencyLevel, setEmergencyLevel] = useState("");
   const [amountOfBlood, setAmountOfBlood] = useState("");
+  const [reqId, setReqId] = useState("");
+  const [message, setMessage] = useState("");
 
   const sendMessage = () => {
-    console.log("Inside send message");
+    //console.log("Inside send message");
     axios
       .post(MSG_URL, {
         smsText: smsText,
         bldgrp: bldgrp,
       })
       .then((response) => {
-        console.log("Message sent");
+        //console.log("Message sent");
         console.log(response.data);
       })
       .catch((error) => {
@@ -40,7 +43,7 @@ const SendMessage = () => {
   };
 
   const createRequest = () => {
-    console.log("Inside create request");
+    //console.log("Inside create request");
     axios
       .post("/admin/addRequests", {
         bldGrpRequired: bldgrp,
@@ -52,9 +55,12 @@ const SendMessage = () => {
       })
       .then((response) => {
         console.log("Request created");
-        console.log(response.data);
+        setMessage("Request Created Successfully");
+        console.log(response?.data?.result?.requet_id);
+        setReqId(response?.data?.result?.request_id);
       })
       .catch((error) => {
+        setMessage("Error");
         console.log(error);
       });
   };
@@ -77,11 +83,11 @@ const SendMessage = () => {
   };
 
   return (
-    <div className="p-10 h-screen">
+    <div className="p-10 h-full">
       <h1 className="text-2xl font-bold">Create Request</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4 ">
-        <div>
+       
           <label
             htmlFor="blood-group"
             className="block mb-3 items-start font-bold mt-2"
@@ -155,7 +161,7 @@ const SendMessage = () => {
           ></input>
 
           <h1>End Date of Donation:</h1>
-          <DatePicker selected={enddate} onChange={(date) => setEndate(date)} />
+          <DatePicker selected={enddate} onChange={(date) => setEndate(date)} className="bg-slate-400" />
 
           <div>
             <FormControl>
@@ -223,8 +229,14 @@ const SendMessage = () => {
           >
             Create Request
           </button>
+          </form>
 
-          <h1 className="text-2xl font-bold">Send Message</h1>
+          <h2>Message: {message}</h2>
+          <h3>Request Id: {reqId}</h3>
+          <h3>Link: http://localhost:3000/donate/{reqId}</h3>
+
+        
+          <h1 className="text-2xl font-bold mt-5">Send Message</h1>
           <div className="mt-5">
             <textarea
               id="message"
@@ -235,8 +247,7 @@ const SendMessage = () => {
               onChange={(e) => setSmsText(e.target.value)}
             ></textarea>
           </div>
-        </div>
-      </form>
+       
       <form onSubmit={handleSubmit} className="space-y-4 ">
         <div>
           <button

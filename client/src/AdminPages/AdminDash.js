@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 import axios from "../axios";
 import dateFormat from "dateformat";
+import CurrentRequests from "../Components/CurrentRequests";
 
 const ADMIN_INFO_URL = "/admin/admininfo";
 
@@ -15,8 +16,8 @@ const AdminDash = () => {
     axios
       .get(ADMIN_INFO_URL)
       .then((response) => {
-        console.log("response received");
-        console.log(response.data);
+        // console.log("response received");
+        // console.log(response.data);
         setpiedata(response.data.piedata);
         set_exp_arr(response.data.result);
       })
@@ -83,6 +84,7 @@ const AdminDash = () => {
             ))}
           </div>
         </div>
+        <CurrentRequests/>
       </div>
     </>
   );
@@ -94,7 +96,7 @@ const AdminCard = (props) => {
   // {console.log(props)}
   return (
     <div className="bg-[#E3DEC6]">
-      <div className="grid grid-cols-5 gap-9 font-bold text-md flex pl-3 pt-5 pb-5">
+      <div className="grid grid-cols-5 gap-9 font-bold text-md pl-3 pt-5 pb-5">
         <div>{props.username}</div>
         <div className="break-words">{props.email}</div>
         <div>{dateFormat(props.createdAt, "mmmm dS, yyyy")}</div>
@@ -104,3 +106,4 @@ const AdminCard = (props) => {
     </div>
   );
 };
+

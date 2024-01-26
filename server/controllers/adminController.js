@@ -94,7 +94,7 @@ const adminInfo = async (req, res) => {
     value,
     color: getRandomNonRepeating(),
   }));
-  console.log(op);
+  //console.log(op);
   res.json({ result: result, piedata: op });
 };
 
@@ -129,6 +129,7 @@ const sendMsg = async (req, res) => {
     // fourMonthsAgo.setMonth(fourMonthsAgo.getMonth() - 4);
 
     console.log(BloodGroup);
+    console.log(txtMsg);
     const usersWithBloodGroup = await MedInfo.find({
       bldgrp: { $in: BloodGroup },
     });
@@ -142,11 +143,12 @@ const sendMsg = async (req, res) => {
       { donor_id: { $in: phoneNum_arr } },
       "phonenum"
     );
+    //
     console.log(phoneNumbers);
 
     // Extract phone numbers from the result
     const phoneNumbersArr = phoneNumbers.map((user) => user.phonenum);
-    console.log(phoneNumbersArr);
+    //console.log(phoneNumbersArr);
     for (let k = 0; k < phoneNumbersArr.length; k++) {
       client.messages
         .create({
@@ -213,7 +215,9 @@ const addDonationHistory = async (req, res) => {
 };
 
 const addRequests = async (req, res) => {
+
   try {
+    
     const {
       bldGrpRequired,
       amount_Required,
@@ -241,6 +245,7 @@ const addRequests = async (req, res) => {
 
     await newRequest.save();
 
+    console.log("Request added")
     res.status(201).json({
       result: newRequest,
       message: "New request entry added successfully",

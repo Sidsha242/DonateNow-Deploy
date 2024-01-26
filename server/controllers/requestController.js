@@ -40,5 +40,25 @@ const getRequests = async (req, res) => {
   }
 };
 
-module.exports = {getRequests};
+const delReq = async(req,res) => {
+  const reqid = req.params.id;
+  console.log(reqid);
+
+  try{
+    const deletedReq = await Request.deleteOne({request_id:reqid});
+
+    if (deletedReq) {
+      console.log('Request deleted successfully:', deletedReq);
+    } else {
+      console.log('Request not found');
+    }
+
+  }
+  catch(err)
+  {
+    console.log(err);
+  }
+
+}
+module.exports = {getRequests,delReq};
 

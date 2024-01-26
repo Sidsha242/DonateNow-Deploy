@@ -41,7 +41,7 @@ const userRegister = async (req, res) => {
 };
 
 const userSignIn = async (req, res) => {
-  console.log(req.body);
+  //console.log(req.body);
   try {
     const foundUser = await User.findOne({
       email: req.body.email,
@@ -54,7 +54,7 @@ const userSignIn = async (req, res) => {
         async (error, response) => {
           if (response) {
             const donor_id = foundUser.donor_id;
-            console.log(foundUser?.role);
+            //console.log(foundUser?.role);
             const role = foundUser?.role;
 
             // create JWTs
@@ -97,7 +97,7 @@ const userSignIn = async (req, res) => {
           }
         }
       );
-      console.log("found");
+      //console.log("found");
       console.log(`User ${foundUser} logged in`);
     } else {
       res.status(403).json({ auth: false, message: "no user exists" });
@@ -160,7 +160,7 @@ const userSignOut = async (req, res) => {
 
 const getDetailsOfUser = async (req, res) => {
   const userId = req.params.id;
-  console.log("Inside getDetailsOfUser");
+  //console.log("Inside getDetailsOfUser");
 
   try {
     const donorData = await User.aggregate([
@@ -213,7 +213,7 @@ const getDetailsOfUser = async (req, res) => {
 
 const getAllDonationsofUser = async (req, res) => {
   const userId = req.params.id;
-  console.log("Inside getAllDonationsofUser");
+  //console.log("Inside getAllDonationsofUser");
 
   try {
     const donorDonationData = await DonationHistory.find({ donor_id: userId });
@@ -230,7 +230,7 @@ const getAllDonationsofUser = async (req, res) => {
 //no need as we created a field in medInfo model
 const getTotalBloodDonatedByUser = async (req, res) => {
   const userId = req.params.id;
-  console.log("Inside getTotalBloodDonatedByUser");
+ //console.log("Inside getTotalBloodDonatedByUser");
 
   try {
     const totalDonatedBlood = await DonationHistory.aggregate([
@@ -259,6 +259,7 @@ const getTotalBloodDonatedByUser = async (req, res) => {
       });
   }
 };
+
 
 module.exports = {
   userRegister,

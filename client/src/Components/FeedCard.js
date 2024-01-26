@@ -1,9 +1,32 @@
 import React from "react";
 import alert1 from "../Images/warning.png";
 import alert2 from "../Images/danger-icon.png";
+import img1 from "../Images/Donation.svg"
+import { Link } from "react-router-dom";
+
+function Card(request) {
+
+  const data = request.request;
+
+  if (data.emergencyLevel === "Normal_Drive") 
+  {    
+    return <DonationDrive request={data} />;  
+  
+  }  
+  else if (data.emergencyLevel === "Mass_Casualty")
+  {
+    return <MassCasualty request={data} />;
+  }
+  else if(data.emergencyLevel === "Immediate")
+  {
+    return <ImmediateDonation request={data} />
+  }
+}
 
 const FeedCard = (props) => {
-  const { request } = props;
+
+  const{ request } = props;
+  
 
   // what needs to be displayed in the card
   // 1. type of request
@@ -16,92 +39,131 @@ const FeedCard = (props) => {
 
   return (
     <div>
-      {request.type === "Alert" ? (
-        <div>
-          <a
-            href="#"
-            className="block w-3/4 p-6 mt-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 grid grid-cols-2"
-          >
-            <div>
-              <img
-                src={alert1}
-                className="w-10 h-10 animate-pulse"
-                alt="Alert 1"
-              ></img>
-              <h5 className="mb-2 text-2xl font-bold tracking-tight text-red-700">
-                Donation Required
-              </h5>
-              <div className="flex">
-                <p className="font-bold text-xl text-gray-700">
-                  Blood Groups Required:
-                </p>
-                <p className="ml-5 font-bold text-xl">
-                  {request.bldGrpRequired}
-                </p>
-              </div>
-              <p className="font-bold text-xl text-gray-700">
-                End Date of Request: {request.endDate_of_Request}
-              </p>
-              <p className="font-bold text-xl text-gray-700">
-                Request ID: {request.request_id}
-              </p>
-              <p className="font-bold text-xl text-gray-700">
-                Emergency Level: {request.emergencyLevel}
-              </p>
-              <p className="font-bold text-xl text-gray-700">
-                Total Units Required: {request.amount_Required}
-              </p>
-              <p className="font-bold text-xl text-gray-700">
-                Units Remaining: {request.amount_Remaining}
-              </p>
-            </div>
-            <div>
-              <h5 className="mb-2 text-xl font-bold tracking-tight">
-                Time since donation requested:
-              </h5>
-            </div>
-          </a>
-        </div>
-      ) : (
-        <div>
-          <a
-            href="#"
-            className="block w-3/4 p-6 mt-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100"
-          >
-            <img
-              src={alert2}
-              className="w-10 h-10 animate-pulse"
-              alt="Alert 2"
-            ></img>
-            <h5 className="mb-2 text-xl font-bold tracking-tight text-red-700">
-              Mass Casualty
-            </h5>
-            <div className="flex">
-              <p className="font-bold text-xl text-gray-700">
-                Blood Groups Required:
-              </p>
-              <p className="ml-5 font-bold text-xl">{request.bldGrpRequired}</p>
-              <p className="font-bold text-gray-700">
-                End Date of Request: {request.endDate_of_Request}
-              </p>
-              <p className="font-bold text-gray-700">
-                Request ID: {request.request_id}
-              </p>
-              <p className="font-bold text-gray-700">
-                Emergency Level: {request.emergencyLevel}
-              </p>
-              <p className="font-bold text-gray-700">
-                Total Units Required: {request.amount_Required}
-              </p>
-              <p className="font-bold text-gray-700">
-                Units Remaining: {request.amount_Remaining}
-              </p>
-            </div>
-          </a>
-        </div>
-      )}
+        <Card request={request} />
     </div>
   );
 };
 
 export default FeedCard;
+
+
+const DonationDrive = (request) => {
+  const data = request.request
+
+  const end_date = data?.endDate_of_Request.substring(0,10);
+  const end_time = data?.endDate_of_Request.substring(12,16);
+
+  return (
+    <Link to={`/donate/${data.request_id}`} >
+      <div className="w-11/12 mt-6 bg-white border-gray-200 rounded-lg shadow">
+            <div className="p-2 text-xl font-bold text-[#4200FF]">
+              Donation Drive
+            </div>
+            <div className="bg-blue-600 p-6 grid grid-cols-8 space-x-10 text-white font-semibold text-lg">
+            <div>
+              <p>
+                Blood Groups Required:
+              </p>
+              <p>{data.bldGrpRequired}</p>
+            </div>
+              <p>
+                End Date of Request: {end_date}
+              </p>
+              <p>
+                End Time: {end_time}
+              </p>
+              <p>
+                Request ID: {data.request_id}
+              </p>
+              <p>
+                Total Units Required: {data.amount_Required}ml
+              </p>
+              <p>
+                Units Remaining: {data.amount_Remaining}ml
+              </p>
+            </div>
+            </div>
+    </Link>
+  )
+}
+
+
+const MassCasualty = (request) => {
+  const data = request.request
+
+  const end_date = data?.endDate_of_Request.substring(0,10);
+  const end_time = data?.endDate_of_Request.substring(12,16);
+  return (
+    <Link to={`/donate/${data.request_id}`} >
+      <div className="w-11/12 mt-6 bg-white border-gray-200 rounded-lg shadow">
+            <div className="p-2 text-xl font-bold text-red-600">
+              Mass Casualty
+            </div>
+            <div className="bg-red-500 p-6 grid grid-cols-8 space-x-10 text-white font-semibold text-lg">
+            <div>
+              <p>
+                Blood Groups Required:
+              </p>
+              <p>{data.bldGrpRequired}</p>
+            </div>
+              <p>
+                End Date of Request: {end_date}
+              </p>
+              <p>
+                End Time: {end_time}
+              </p>
+              <p>
+                Request ID: {data.request_id}
+              </p>
+              <p>
+                Total Units Required: {data.amount_Required}ml
+              </p>
+              <p>
+                Units Remaining: {data.amount_Remaining}ml
+              </p>
+            </div>
+            </div>
+    </Link>
+  )
+}
+
+const ImmediateDonation = (request) => {
+  const data = request.request
+
+  const end_date = data?.endDate_of_Request.substring(0,10);
+  const end_time = data?.endDate_of_Request.substring(12,16);
+  
+  return (
+    <Link to={`/donate/${data.request_id}`}>
+      <div className="w-11/12 mt-6 bg-white border-gray-200 rounded-lg shadow">
+            <div className="p-2 text-xl font-bold text-red-600">
+              Immediate Donation
+            </div>
+            <div className="bg-red-500 p-6 grid grid-cols-8 space-x-10 text-white font-semibold text-lg">
+            <div>
+              <p>
+                Blood Groups Required:
+              </p>
+              <p>{data.bldGrpRequired}</p>
+            </div>
+              <p>
+                End Date of Request: {end_date}
+              </p>
+              <p>
+                End Time: {end_time}
+              </p>
+              <p>
+                Request ID: {data.request_id}
+              </p>
+              <p>
+                Total Units Required: {data.amount_Required}ml
+              </p>
+              <p>
+                Units Remaining: {data.amount_Remaining}ml
+              </p>
+            </div>
+            </div>
+    </Link>
+  )
+}
+

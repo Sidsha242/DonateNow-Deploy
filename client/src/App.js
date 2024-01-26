@@ -11,15 +11,16 @@ import Layout from './Pages/Layout';
 import Missing from './Pages/Missing';
 import Unauthorized from './Pages/Unauthorized';
 import PersistLogin from './Components/PersistLogin';
-
 import { AuthProvider } from './Context/AuthProvider';
 import RequireAuth from './Pages/RequireAuth';
 import Logout from './Pages/Logout';
-import LinkPage from './Pages/LinkPage';
 import AdminLayout from './Pages/AdminLayout';
 import AdminDash from './AdminPages/AdminDash';
 import SendMessage from './AdminPages/SendMessage';
 import AddDonation from './AdminPages/AddDonation';
+import UserDonationHistory from './Pages/UserDonationHistory';
+import LeaderBoard from './Pages/LeaderBoard';
+import Donate from './Pages/Donate';
 
 const ROLES = {
     'User' : 2001,
@@ -42,7 +43,7 @@ function App() {
             <Route path='medinfo' element={<MedInfo/>}/>
             <Route path="unauthorized" element={<Unauthorized />}/>
             <Route path="logout" element={<Logout/>}/>
-            <Route path="linkpage" element={<LinkPage/>}/>
+
 
             {/*protected routes*/}
             {/* protected for users */}
@@ -50,6 +51,9 @@ function App() {
               <Route element={<RequireAuth allowedRoles={ROLES.User}/>}>
                   <Route path='feed' element={<Feed />}/>
                   <Route path='dashboard' element={<Dashboard/>}/>
+                  <Route path='donhistory' element={<UserDonationHistory/>}/>
+                  <Route path='leaderboard' element={<LeaderBoard/>}/>
+                  <Route path='donate/:id' element={<Donate/>}/>
               </Route>
 
               {/* protected for admins */}

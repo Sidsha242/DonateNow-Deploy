@@ -11,8 +11,8 @@ const useRefreshToken = () => {
             withCredentials: true   //is required for sending cookies to server
         });
         setAuth((prev) => {
-            console.log("In refresh token");
-            console.log("prev = "+JSON.stringify(prev));
+            //console.log("In refresh token");
+            //console.log("prev = "+JSON.stringify(prev));
             return { 
                 ...prev,
                 donor_id: response.data.donor_id,

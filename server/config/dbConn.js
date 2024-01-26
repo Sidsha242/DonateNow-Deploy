@@ -6,11 +6,6 @@ const connectDB = async () => {
             useUnifiedTopology: true,
             useNewUrlParser: true,
         });
-        // const db = mongoose.connection;
-        // db.on("error", console.error.bind(console, "connection error: "));
-        // db.once("open", function () {
-        //     console.log(`MongoDB Connected successfully: ${conn.connection.host}`);
-        // });
     } catch (err) {
         console.log(err);
         process.exit(1);

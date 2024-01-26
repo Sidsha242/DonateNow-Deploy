@@ -6,6 +6,7 @@ bcrypt = require('bcrypt')
 const config = require("../config.js");
 require("dotenv").config();
 
+
 const userController = require("../controllers/usersController");
 const medInfoController = require("../controllers/medInfoController");
 const requestController = require("../controllers/requestController");
@@ -48,5 +49,8 @@ router.get("/getAllDonationsofUser/:id", userController.getAllDonationsofUser);
 router.get("/getTotalBloodDonatedByUser/:id", userController.getTotalBloodDonatedByUser);
 
 router.get("/getRequests", requestController.getRequests);
+
+router.delete("/delReq/:id",requestController.delReq);
+
 
 module.exports = router;

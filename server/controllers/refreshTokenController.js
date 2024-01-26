@@ -16,7 +16,7 @@ const handleRefreshToken = async (req, res) => {
         (err, decoded) => {
             if (err || foundUser.donor_id !== decoded.donor_id) return res.sendStatus(403);
             const role = foundUser?.role;
-            console.log("role: "+role);
+            //console.log("role: "+role);
             const accessToken = jwt.sign(
                 { 
                     "UserInfo": {
