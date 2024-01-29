@@ -5,6 +5,7 @@ const DonationHistory = require("../models/donationHistoryModel");
 const RequestInfo = require("../models/requestInfoModel");
 const Request = require("../models/requestModel");
 const config = require("../config.js");
+const InterestedDonor = require("../models/interestedDonorModel");
 
 const db = mongoose.connection;
 const client = require("twilio")(config.accountSID, config.authToken);
@@ -171,6 +172,21 @@ const addDonationHistory = async (req, res) => {
     const { donor_id, request_id, bldGrpDonated, amount_Donated } = req.body;
     //no need for date of donation
 
+    const interestedDonorEntry = await InterestedDonor.findOne({ request_id, donor_id });
+
+    if (interestedDonorEntry) {
+      await InterestedDonor.deleteOne({ request_id, donor_id });
+
+      const requestInfo = await RequestInfo.findOne({ request_id });
+
+      if (requestInfo) {
+        requestInfo.noOfInterestedDonors -= 1;
+        await requestInfo.save();
+      } else {
+        console.error("RequestInfo document not found for request_id:", request_id);
+      }
+    }
+
     const newDonation = new DonationHistory({
       donor_id,
       request_id,
@@ -258,6 +274,28 @@ const addRequests = async (req, res) => {
   }
 };
 
+const addInterestedDonor = async (req, res) => {
+  const { requestId, donorId } = req.body; // Assuming the request body contains requestId and donorId
+
+  try {
+    await InterestedDonor.create({ request_id: requestId, donor_id: donorId });
+
+    const requestInfo = await RequestInfo.findOne({ request_id: requestId });
+
+    if (requestInfo) {
+      requestInfo.noOfInterestedDonors += 1;
+
+      await requestInfo.save();
+
+      res.status(200).json({ message: 'Interested donor added successfully.' });
+    } else {
+      res.status(404).json({ error: `RequestInfo with request_id ${requestId} not found.` });
+    }
+  } catch (error) {
+    console.error('Error adding interested donor:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 module.exports = {
   getAllUsersEntirely,
   adminInfo,
@@ -265,4 +303,5 @@ module.exports = {
   addDonationHistory,
   addRequests,
   requestInfo,
+  addInterestedDonor
 };

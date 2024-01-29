@@ -28,6 +28,11 @@ const RequestInfoSchema = mongoose.Schema({
         enum: ['Mass_Casualty','Immediate','Normal_Drive'],
         required: true
     },
+    noOfInterestedDonors: {
+        type: Number,
+        default: 0,
+        required: true,
+    }
     // location: {
     //     type: String,
     //     required: true,

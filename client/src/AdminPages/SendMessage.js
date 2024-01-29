@@ -233,7 +233,7 @@ const SendMessage = () => {
 
           <h2>Message: {message}</h2>
           <h3>Request Id: {reqId}</h3>
-          <h3>Link: http://localhost:3000/donate/{reqId}</h3>
+          <h3>Link: http://localhost:3000/donate/{reqId} </h3>
 
         
           <h1 className="text-2xl font-bold mt-5">Send Message</h1>

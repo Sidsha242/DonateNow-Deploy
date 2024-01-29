@@ -16,4 +16,6 @@ router.post("/addRequests", adminController.addRequests);
 
 router.get("/requestinfo", adminController.requestInfo);
 
+router.post("/addInterestedDonor", adminController.addInterestedDonor);
+
 module.exports = router;
