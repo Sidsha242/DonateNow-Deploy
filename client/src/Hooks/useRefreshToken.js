@@ -1,14 +1,12 @@
 import axios from "../axios";
 import useAuth from './useAuth';
 
-//JWT access tokens last 20 mins if we want more than that we need this
-
 const useRefreshToken = () => {
     const { setAuth } = useAuth();
 
     const refresh = async () => {
         const response = await axios.get('/refresh',{
-            withCredentials: true   //is required for sending cookies to server
+            withCredentials: true,
         });
         setAuth((prev) => {
             //console.log("In refresh token");

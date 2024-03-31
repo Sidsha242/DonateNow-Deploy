@@ -2,7 +2,6 @@ import React from "react";
 import SearchBar from "../Components/SearchBar";
 import { useState, useEffect } from "react";
 import axios from "../axios";
-import { Popover } from "@headlessui/react";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -10,9 +9,8 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import dateFormat from "dateformat";
 
-import DatePicker from "react-datepicker";
 
-import "react-datepicker/dist/react-datepicker.css";
+import toast from "react-hot-toast";
 
 const ADMIN_INFO_URL = "/admin/admininfo";
 const REQUEST_INFO_URL = "/admin/requestinfo";
@@ -46,8 +44,6 @@ const AddDonation = () => {
       .get(REQUEST_INFO_URL)
       .then((response) => {
         setRequestArr(response.data);
-        console.log("request");
-        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -55,7 +51,6 @@ const AddDonation = () => {
   }, []);
 
   const addDonationHistory = () => {
-    console.log("Inside add donation history");
     axios
       .post("/admin/addDonationHistory", {
         bldGrpDonated: obj.bloodgrp,
@@ -67,36 +62,31 @@ const AddDonation = () => {
         // dondate: dondate,
       })
       .then((response) => {
-        console.log("Donation history added");
-        console.log(response.data);
+          toast.success('Donation Added!')
       })
       .catch((error) => {
+        toast.error('Error')
         console.log(error);
       });
   };
 
   let [Filter, setFilter] = useState("");
 
-  console.log(exp_arr);
   const displayedData = Filter
     ? exp_arr.filter((element) =>
         element?.username.toLowerCase().includes(Filter.toLowerCase())
       )
     : exp_arr;
 
-  console.log("displayedData");
-  console.log(displayedData);
-  console.log(requestArr);
 
   const AdminCard = (props) => {
-    //console.log(props)
     return (
-      <div className="bg-[#E3DEC6] h-fill">
+      <div className="bg-gray-300 h-fill">
         <div className="grid grid-cols-5 font-bold text-sm pl-2 pt-6 pb-6">
-          <div>{props.donor_id}</div>
-          <div>{props.username}</div>
-          <div>{props.bloodgrp}</div>
-          <div>{props.phonenum}</div>
+          <div>{props?.donor_id}</div>
+          <div>{props?.username}</div>
+          <div>{props?.bloodgrp}</div>
+          <div>{props?.phonenum}</div>
           <div>
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-1 px-1 rounded"
@@ -110,17 +100,15 @@ const AddDonation = () => {
     );
   };
   function addDonation(obj) {
-    console.log(obj);
     setobj(obj);
   }
 
   const RequestCard = (props) => {
-    //console.log(props)
     return (
-      <div className="bg-[#E3DEC6] h-fill">
+      <div className="bg-gray-300 h-fill">
         <div className="grid grid-cols-5 font-bold text-sm pl-2 pt-6 pb-6">
-          <div>{props.request_id}</div>
-          <div>{props.bldGrpRequired}</div>
+          <div>{props?.request_id}</div>
+          <div>{props?.bldGrpRequired}</div>
           <div className="pr-10">
             {dateFormat(props.end_date, "mmmm dS, yyyy")}
           </div>
@@ -138,7 +126,6 @@ const AddDonation = () => {
     );
   };
   function addRequest(request) {
-    console.log(request);
     setRequest(request);
   }
 
@@ -168,10 +155,10 @@ const AddDonation = () => {
               {requestArr.map((request) => (
                 <RequestCard
                   key={request._id}
-                  request_id={request.request_id}
+                  request_id={request?.request_id}
                   donationType={request.requestdetails[0]?.donationType}
                   end_date={request.requestdetails[0]?.endDate_of_Request}
-                  bldGrpRequired={request.bldGrpRequired}
+                  bldGrpRequired={request?.bldGrpRequired}
                 />
               ))}
             </div>
@@ -179,10 +166,10 @@ const AddDonation = () => {
         </div>
 
         <div className="p-5">
-          <h1 className="font-bold text-lg">Selected user: {obj.username}</h1>
-          <h1 className="font-bold text-lg">Donor ID: {obj.donor_id}</h1>
+          <h1 className="font-bold text-lg">Selected user: {obj?.username}</h1>
+          <h1 className="font-bold text-lg">Donor ID: {obj?.donor_id}</h1>
           <h1 className="font-bold text-lg">
-            Request ID: {request.request_id}
+            Request ID: {request?.request_id}
           </h1>
 
           <h1 className="font-bold text-lg">Donation amount:(in ml)</h1>
@@ -251,13 +238,6 @@ const AddDonation = () => {
               </RadioGroup>
             </FormControl>
           </div>
-          {/* <div className="pb-2">
-            <h1>Date of Donation:</h1>
-            <DatePicker
-              selected={dondate}
-              onChange={(date) => setDondate(date)}
-            />
-          </div> */}
           <button
             onClick={addDonationHistory}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5"

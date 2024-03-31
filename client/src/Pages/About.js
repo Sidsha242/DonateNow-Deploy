@@ -1,14 +1,15 @@
 import React from "react";
-import iphoneimg from "../Images/woman_donate.gif";
-import { motion } from "framer-motion";
+import jay_img from "../Images/jay_img.png"
+import athul_img from "../Images/athul_pic.jpg"
+import sid_img from "../Images/sid_pic.jpg" 
 
 const About = () => {
   return (
     <>
-      <div className="h-screen p-5 grid grid-cols-2">
-        <div>
-          <h1 className="font-bold text-5xl pt-10 font-poppins">
-            Hi we are DonateNow
+      <div className="h-full p-8">
+        <div className="lg:grid ;g:grid-cols-2">
+          <h1 className="font-bold text-3xl pt-10 lg:text-6xl">
+            Hi we are <br></br>DonateNow
           </h1>
           <p className="pt-5 text-lg font-poppins">
             Our aim is to provide hospitals a tool to request blood donations
@@ -19,19 +20,26 @@ const About = () => {
             appointments and find donation centers near them.
           </p>
         </div>
-        <div>
-          <motion.div
-            className=""
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              duration: 0.9,
-              delay: 0.5,
-              ease: [0, 0.71, 0.2, 1.01],
-            }}
-          >
-            <img src={iphoneimg}></img>
-          </motion.div>
+         <div className="font-bold text-2xl text-[#3C3C3C] text-center mt-20 mb-16 lg:mb-10">
+          Our Team
+        </div>
+        <div className="flex flex-col space-y-10 p-8 lg:flex-row lg:space-x-28 mb-10">
+            <div className="flex flex-col justify-center items-center">
+                  <img src={jay_img} className="rounded-full w-[300px] h-[250px] lg:w-[300px] lg:h-[200px] block"></img>
+                  <div className='font-bold text-xl'>Jay Patel</div>
+            </div>
+            <div className="flex flex-col justify-center items-center">
+                  <img src={athul_img} className="rounded-full w-[300px] h-[250px] lg:w-[300px] lg:h-[200px] block"></img>
+                  <div className='font-bold text-xl'>Athul Srinivas</div>
+            </div>
+            <div className="flex flex-col justify-center items-center">
+                  <img src={sid_img} className="rounded-full w-[300px] h-[250px] lg:w-[300px] lg:h-[200px] block"></img>
+                  <div className='font-bold text-xl'>Sidhant Sharma</div>
+            </div>
+            <div className="flex flex-col justify-center items-center">
+                  <img src={jay_img} className="rounded-full w-[300px] h-[250px] lg:w-[300px] lg:h-[200px] block"></img>
+                  <div className='font-bold text-xl'>Naamya Patiyal</div>
+            </div>
         </div>
       </div>
     </>

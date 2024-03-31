@@ -8,7 +8,7 @@ const useLogout = () => {
         setAuth({});
         try{
             await axios.get('/user/sign_out',{
-                withCredentials: true,   //is required for sending cookies to server
+                withCredentials: true, 
             });
             console.log('logged out');
         } catch(err){

@@ -1,7 +1,5 @@
-
 const mongoose = require("mongoose");
 const nanoid = require("nanoid");
-
 const UserSchema = mongoose.Schema({
   donor_id: {
     type: String,
@@ -14,10 +12,6 @@ const UserSchema = mongoose.Schema({
     required: true
   },
   lastName: {
-    type: String,
-    required: true
-  },
-  username: {
     type: String,
     required: true
   },
@@ -38,10 +32,6 @@ const UserSchema = mongoose.Schema({
     type: Date,
     default: Date.now()
   },
-  isVerified: {
-    type: Boolean,
-    default: false
-  },
   role: {
     type: Number,
     default: 2001
@@ -54,4 +44,3 @@ const UserSchema = mongoose.Schema({
 
 
 module.exports = mongoose.model("User", UserSchema);
-

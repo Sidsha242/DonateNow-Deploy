@@ -1,5 +1,5 @@
+require('dotenv').config();
 import {BrowserRouter , Routes, Route} from 'react-router-dom';
-
 import Login from './Pages/Login';
 import Register from './Pages/Register';
 import Home from './Pages/Home';
@@ -10,21 +10,22 @@ import About from './Pages/About';
 import Layout from './Pages/Layout';
 import Missing from './Pages/Missing';
 import Unauthorized from './Pages/Unauthorized';
-import PersistLogin from './Components/PersistLogin';
-import { AuthProvider } from './Context/AuthProvider';
-import RequireAuth from './Pages/RequireAuth';
+import PersistLogin from './Components/PersistLogin';  
+import { AuthProvider } from './Context/AuthProvider'; 
+import RequireAuth from './Pages/RequireAuth';         
 import Logout from './Pages/Logout';
 import AdminLayout from './Pages/AdminLayout';
 import AdminDash from './AdminPages/AdminDash';
 import SendMessage from './AdminPages/SendMessage';
 import AddDonation from './AdminPages/AddDonation';
 import UserDonationHistory from './Pages/UserDonationHistory';
-import LeaderBoard from './Pages/LeaderBoard';
 import Donate from './Pages/Donate';
 
+
+
 const ROLES = {
-    'User' : 2001,
-    'Admin' : 1984,
+    'User' : process.env.USER_ROLE ,
+    'Admin' : process.env.ADMIN_ROLE,
 }
 
 
@@ -52,7 +53,6 @@ function App() {
                   <Route path='feed' element={<Feed />}/>
                   <Route path='dashboard' element={<Dashboard/>}/>
                   <Route path='donhistory' element={<UserDonationHistory/>}/>
-                  <Route path='leaderboard' element={<LeaderBoard/>}/>
                   <Route path='donate/:id' element={<Donate/>}/>
               </Route>
 
@@ -75,3 +75,4 @@ function App() {
   );
 }
 export default App;
+

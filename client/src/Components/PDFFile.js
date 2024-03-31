@@ -2,19 +2,19 @@
 import React from 'react'
 
 import { Page,Text, Image, Document, StyleSheet } from '@react-pdf/renderer'
-import image1 from "../Images/blood_drop_1.png"
+
 
 const styles = StyleSheet.create({
     body: {
         paddingTop: 35,
         paddingBottom: 65,
         paddingHorizontal: 35,
-        backgroundColor: "red"
+        borderWidth: 10,
+        borderColor: 'red',
     },
     header : {
-        fontSize: 45,
+        fontSize: 30,
         textAlign: "center",
-        color: "white",
         fontWeight: "bold"
     },
     text : {

@@ -31,8 +31,6 @@ const PersistLogin = () => {
     }, [])
 
     useEffect(() => {
-        //console.log(`isLoading: ${isLoading}`)
-        //console.log(`aT: ${JSON.stringify(auth?.token)}`)
     }, [isLoading])
 
     return (
@@ -40,7 +38,7 @@ const PersistLogin = () => {
             {!persist
                 ? <Outlet />
                 : isLoading
-                    ? <p>Loading...</p>
+                    ? <div className="h-screen text-2xl"><p>Loading...</p></div>
                     : <Outlet />
             }
         </>

@@ -1,14 +1,12 @@
-// display requests on feed route (natural joined)
 const Request = require('../models/requestModel'); 
 const RequestInfo = require('../models/requestInfoModel');
 
-// Define a route that performs the natural join
 const getRequests = async (req, res) => {
   try {
     const joinedData = await Request.aggregate([
       {
         $lookup: {
-          from: 'requestinfos', // Name of the collection you want to join with (case-insensitive)
+          from: 'requestinfos',
           localField: 'request_id',
           foreignField: 'request_id',
           as: 'requestInfo',
@@ -19,7 +17,7 @@ const getRequests = async (req, res) => {
       },
       {
         $project: {
-          _id: 0, // Exclude _id field if not needed
+          _id: 0,
           request_id: 1,
           bldGrpRequired: 1,
           amount_Required: 1,
@@ -49,6 +47,7 @@ const delReq = async(req,res) => {
 
     if (deletedReq) {
       console.log('Request deleted successfully:', deletedReq);
+      res.status(200).json({message : 'Deleted Successfully'})
     } else {
       console.log('Request not found');
     }

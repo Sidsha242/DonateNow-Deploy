@@ -9,11 +9,9 @@ const CurrentRequests = () => {
   useEffect(() => {
     
     axios
-      .get(`http://localhost:3031/user/getRequests`)
+      .get(`/user/getRequests`)
       .then((response) => {
-        // console.log("got all requests");
-        // console.log(response.data);
-        setRequests(response.data); // Set the requests data in state
+        setRequests(response.data);
       })
       .catch((error) => {
         console.error("Error fetching requests:", error);
@@ -22,26 +20,34 @@ const CurrentRequests = () => {
 
    
   const deleteReq = (reqId) => {
-    //console.log(reqId);
-    axios.delete(`http://localhost:3031/user/delReq/${reqId}`)
+    axios.delete(`/user/delReq/${reqId}`)
         .then((response) => {
         console.log(response);
+        toast.success('Request Deleted!')
         const newList = requests.filter((item) => item.request_id !== reqId);
         setRequests(newList);
       })
       .catch((error) => 
       {
+        toast.error('Error in deletion!')
         console.log(error)
       })
   }
 
   return (
-    <div>
+    <div className='font-cust1'>
+      <div className='flex flex-row space-x-16 p-5 bg-red-200 mt-2 font-semibold'>
+            <p className='w-20'>Request Id</p>
+           <p  className='w-20'>Bld Group Reqd.</p>
+           <p  className='w-20'>Amt Reqd.</p>
+           <p className='w-20'>Interested Donors</p>
+      </div>
       {requests.map((requests,index) => (
-        <div className='flex flex-row space-x-10 p-5 bg-red-100 mt-2'> 
-           <p>{requests.request_id}</p>
-           <p>{requests.bldGrpRequired}</p>
-           <p>{requests.amount_Required}</p>
+        <div className='flex flex-row space-x-16 p-5 bg-red-100 mt-2'> 
+           <p className='w-20'>{requests?.request_id}</p>
+           <p className='w-20'>{requests?.bldGrpRequired}</p>
+           <p className='w-20'>{requests?.amount_Required}</p>
+           <p className='w-20'>{requests?.noOfInterestedDonors}</p>
            <button className='focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2' onClick={() => deleteReq(requests.request_id)}>Delete</button>
         </div>
        

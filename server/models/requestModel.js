@@ -1,4 +1,3 @@
-
 const mongoose = require("mongoose");
 
 const RequestSchema = mongoose.Schema({
@@ -28,6 +27,3 @@ const RequestSchema = mongoose.Schema({
 
 
 module.exports = mongoose.model("Request", RequestSchema);
-
-//can also do timestamps:true
-

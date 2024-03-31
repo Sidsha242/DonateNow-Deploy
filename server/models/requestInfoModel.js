@@ -32,11 +32,14 @@ const RequestInfoSchema = mongoose.Schema({
         type: Number,
         default: 0,
         required: true,
+    },
+    location: {
+         type: String,
+         required: true,
+    },
+    locUrl: {
+        type: String,
     }
-    // location: {
-    //     type: String,
-    //     required: true,
-    // },
 });
 
 

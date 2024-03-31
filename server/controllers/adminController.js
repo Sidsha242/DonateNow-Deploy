@@ -1,14 +1,14 @@
+require('dotenv').config();
 const User = require("../models/userModel");
 const MedInfo = require("../models/medInfoModel");
 const mongoose = require("mongoose");
 const DonationHistory = require("../models/donationHistoryModel");
 const RequestInfo = require("../models/requestInfoModel");
 const Request = require("../models/requestModel");
-const config = require("../config.js");
 const InterestedDonor = require("../models/interestedDonorModel");
 
 const db = mongoose.connection;
-const client = require("twilio")(config.accountSID, config.authToken);
+const client = require("twilio")(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
 
 const getAllUsersEntirely = async (req, res) => {
   try {
@@ -95,7 +95,6 @@ const adminInfo = async (req, res) => {
     value,
     color: getRandomNonRepeating(),
   }));
-  //console.log(op);
   res.json({ result: result, piedata: op });
 };
 
@@ -136,29 +135,24 @@ const sendMsg = async (req, res) => {
     });
     console.log(usersWithBloodGroup);
 
-    // Collect their phone numbers
     const phoneNum_arr = usersWithBloodGroup.map((user) => user.donor_id);
 
-    // Now you have an array of donor_ids, you need to fetch their phone numbers from the User model
     const phoneNumbers = await User.find(
       { donor_id: { $in: phoneNum_arr } },
       "phonenum"
     );
-    //
-    console.log(phoneNumbers);
 
-    // Extract phone numbers from the result
     const phoneNumbersArr = phoneNumbers.map((user) => user.phonenum);
     //console.log(phoneNumbersArr);
-    for (let k = 0; k < phoneNumbersArr.length; k++) {
-      client.messages
-        .create({
-          to: "+" + phoneNumbersArr[k],
-          from: "+19382536013",
-          body: txtMsg,
-        })
-        .then((message) => console.log("Message sent to", phoneNumbersArr[k]));
-    }
+    // for (let k = 0; k < phoneNumbersArr.length; k++) {
+    //   client.messages
+    //     .create({
+    //       to: "+" + phoneNumbersArr[k],
+    //       from: process.env.TWILIO_PHONE_NUM,
+    //       body: txtMsg,
+    //     })
+    //     .then((message) => console.log("Message sent to", phoneNumbersArr[k]));
+    // }
 
     res.status(200).json({ message: "Messages sent successfully" });
   } catch (error) {
@@ -170,7 +164,6 @@ const sendMsg = async (req, res) => {
 const addDonationHistory = async (req, res) => {
   try {
     const { donor_id, request_id, bldGrpDonated, amount_Donated } = req.body;
-    //no need for date of donation
 
     const interestedDonorEntry = await InterestedDonor.findOne({ request_id, donor_id });
 
@@ -231,9 +224,7 @@ const addDonationHistory = async (req, res) => {
 };
 
 const addRequests = async (req, res) => {
-
   try {
-    
     const {
       bldGrpRequired,
       amount_Required,
@@ -241,12 +232,16 @@ const addRequests = async (req, res) => {
       endDate_of_Request,
       donationType,
       emergencyLevel,
+      location,
+      locUrl,
     } = req.body;
 
     const newRequestInfo = new RequestInfo({
       endDate_of_Request,
       donationType,
       emergencyLevel,
+      location,
+      locUrl
     });
 
     await newRequestInfo.save();
@@ -261,7 +256,6 @@ const addRequests = async (req, res) => {
 
     await newRequest.save();
 
-    console.log("Request added")
     res.status(201).json({
       result: newRequest,
       message: "New request entry added successfully",
@@ -275,7 +269,7 @@ const addRequests = async (req, res) => {
 };
 
 const addInterestedDonor = async (req, res) => {
-  const { requestId, donorId } = req.body; // Assuming the request body contains requestId and donorId
+  const { requestId, donorId } = req.body;
 
   try {
     await InterestedDonor.create({ request_id: requestId, donor_id: donorId });

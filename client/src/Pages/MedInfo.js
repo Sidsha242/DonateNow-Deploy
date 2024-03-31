@@ -2,12 +2,13 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import React from "react";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Axios from "axios";
+
+
+import axios from "../axios";
 
 import { useState } from "react";
+
+import toast from "react-hot-toast";
 
 const MedInfo = () => {
   const [bldgrp, setBldGrp] = useState("");
@@ -19,8 +20,8 @@ const MedInfo = () => {
 
   const medinfo = async () => {
     try {
-      const response = await Axios.post(
-        "http://localhost:3031/user/addMedInfo",
+      const response = await axios.post(
+        "/user/addMedInfo",
         {
           donor_id: loggedInUser.donor_id,
           bldgrp: bldgrp,
@@ -29,8 +30,8 @@ const MedInfo = () => {
         }
       );
 
-      console.log(response);
-      console.log("MedInfo added");
+      toast.success('MedInfo Added!')
+
 
       // Remove user from local storage
       localStorage.removeItem("user");
@@ -39,8 +40,8 @@ const MedInfo = () => {
         window.location.href = "/dashboard";
       }, 1000);
     } catch (error) {
+      toast.error('Registration Unsuccessful!')
       console.error("Error adding MedInfo:", error);
-      // Handle the error, e.g., display an error message to the user
       setMessage(error.response.data.message);
     }
   };
@@ -54,17 +55,16 @@ const MedInfo = () => {
   };
 
   return (
-    <div className="bg-[#F2EEDB]">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto">
-        <div className="w-full mt-10 bg-[#E3DEC6] rounded-lg shadow">
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto font-cust1">
+        <div className="w-full rounded-lg shadow">
           <div className="p-6 space-y-4">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900">
+            <h1 className="text-3xl font-bold leading-tight tracking-tight text-gray-900">
               Medical Info
             </h1>
             <p style={{ color: "red" }}>{message}</p>
             <form onSubmit={handleSubmit} className="space-y-4 ">
-              <div>
-                <h3>Select Gender:</h3>
+              <div className='flex flex-row space-x-5'>
+                <h3 className="font-bold">Sex:</h3>
                 <label>
                   <input
                     type="radio"
@@ -92,8 +92,8 @@ const MedInfo = () => {
                   />
                   Other
                 </label>
-                <p>Selected Gender: {selectedGender}</p>
               </div>
+              <p>Selected Gender: {selectedGender}</p>
               <div>
                 <label
                   htmlFor="blood-group"
@@ -102,7 +102,6 @@ const MedInfo = () => {
                   Blood Group:
                 </label>
                 <FormControl fullWidth>
-                  {/* <InputLabel id="demo-simple-select-label">Blood Group</InputLabel> */}
                   <Select
                     id="blood-group"
                     value={bldgrp}
@@ -129,7 +128,7 @@ const MedInfo = () => {
                 </label>
                 <input
                   type="text"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-1/4 p-2.5 "
                   required
                   id="age"
                   name="age"
@@ -137,44 +136,6 @@ const MedInfo = () => {
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
                 />
-              </div>
-              <div>
-                <label
-                  htmlFor="age"
-                  className="block mb-3 items-start font-bold mt-2"
-                >
-                  Ever had TB, bronchial asthma or allergic disorder, liver
-                  disease, kidney disease, fits or fainting, blue or purple
-                  spots on the skin or mucous membranes, received human
-                  pituitary - growth hormones etc .
-                </label>
-                <FormControl>
-                  <RadioGroup
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue="female"
-                    name="radio-buttons-group"
-                  >
-                    <FormControlLabel
-                      value="yes"
-                      control={<Radio />}
-                      label="Yes"
-                    />
-                    <FormControlLabel
-                      value="no"
-                      control={<Radio />}
-                      label="No"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </div>
-              <div>
-                <label
-                  htmlFor="file"
-                  className="block mb-3 items-start font-bold mt-2"
-                >
-                  Medical Certificate:
-                </label>
-                <input type="file" />
               </div>
               <button
                 type="submit"
@@ -187,7 +148,6 @@ const MedInfo = () => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 

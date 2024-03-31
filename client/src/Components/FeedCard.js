@@ -1,8 +1,7 @@
 import React from "react";
-import alert1 from "../Images/warning.png";
-import alert2 from "../Images/danger-icon.png";
-import img1 from "../Images/Donation.svg"
 import { Link } from "react-router-dom";
+
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 function Card(request) {
 
@@ -10,7 +9,7 @@ function Card(request) {
 
   if (data.emergencyLevel === "Normal_Drive") 
   {    
-    return <DonationDrive request={data} />;  
+    return <MassCasualty request={data} />;  
   
   }  
   else if (data.emergencyLevel === "Mass_Casualty")
@@ -19,7 +18,7 @@ function Card(request) {
   }
   else if(data.emergencyLevel === "Immediate")
   {
-    return <ImmediateDonation request={data} />
+    return <MassCasualty request={data} />
   }
 }
 
@@ -55,8 +54,8 @@ const DonationDrive = (request) => {
 
   return (
     <Link to={`/donate/${data.request_id}`} >
-      <div className="w-11/12 mt-6 bg-white border-gray-200 rounded-lg shadow">
-            <div className="p-2 text-xl font-bold text-[#4200FF]">
+      <div className="w-full mt-6 bg-white rounded-lg shadow">
+            <div>
               Donation Drive
             </div>
             <div className="bg-blue-600 p-6 grid grid-cols-8 space-x-10 text-white font-semibold text-lg">
@@ -95,30 +94,31 @@ const MassCasualty = (request) => {
   const end_time = data?.endDate_of_Request.substring(12,16);
   return (
     <Link to={`/donate/${data.request_id}`} >
-      <div className="w-11/12 mt-6 bg-white border-gray-200 rounded-lg shadow">
-            <div className="p-2 text-xl font-bold text-red-600">
+      <div className="w-full mt-6 bg-white border border-red-400 rounded-lg shadow font-cust1 p-2 flex flex-row gap-20">
+            {/* <div className="text-[#3C3C3C] text-xl">
               Mass Casualty
-            </div>
-            <div className="bg-red-500 p-6 grid grid-cols-8 space-x-10 text-white font-semibold text-lg">
+            </div> */}
+            <div> <LocationOnIcon></LocationOnIcon>{data?.location}</div>
+            <div className="lg:grid lg:text-lg lg:space-x-10 lg:grid-cols-8">
             <div>
-              <p>
-                Blood Groups Required:
-              </p>
-              <p>{data.bldGrpRequired}</p>
+              <p className="text-7xl text-red-400">{data.bldGrpRequired}</p>
             </div>
-              <p>
+            <div>
+             
+            </div>
+              <p className="text-lg">
                 End Date of Request: {end_date}
               </p>
-              <p>
+              <p className="text-lg">
                 End Time: {end_time}
               </p>
-              <p>
+              <p className="text-lg">
                 Request ID: {data.request_id}
               </p>
-              <p>
+              <p className="text-lg">
                 Total Units Required: {data.amount_Required}ml
               </p>
-              <p>
+              <p className="text-lg">
                 Units Remaining: {data.amount_Remaining}ml
               </p>
             </div>

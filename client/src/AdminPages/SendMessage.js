@@ -12,6 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { InputLabel } from "@mui/material";
 import { create } from "@mui/material/styles/createTransitions";
+import toast from "react-hot-toast";
 
 
 const MSG_URL = "/admin/sendMsg";
@@ -23,6 +24,8 @@ const SendMessage = () => {
   const [donationType, setDonationType] = useState("");
   const [emergencyLevel, setEmergencyLevel] = useState("");
   const [amountOfBlood, setAmountOfBlood] = useState("");
+  const [location, setLocation] = useState("");
+  const [locUrl, setlocUrl] = useState("");
   const [reqId, setReqId] = useState("");
   const [message, setMessage] = useState("");
 
@@ -34,6 +37,7 @@ const SendMessage = () => {
         bldgrp: bldgrp,
       })
       .then((response) => {
+        toast.success('Message Sent!')
         //console.log("Message sent");
         console.log(response.data);
       })
@@ -50,11 +54,14 @@ const SendMessage = () => {
         amount_Required: amountOfBlood,
         amount_Remaining: amountOfBlood,
         endDate_of_Request: enddate,
+        location: location,
+        locUrl : locUrl,
         donationType: donationType,
         emergencyLevel: emergencyLevel,
       })
       .then((response) => {
-        console.log("Request created");
+        //console.log("Request created");
+        toast.success('Request Created!')
         setMessage("Request Created Successfully");
         console.log(response?.data?.result?.requet_id);
         setReqId(response?.data?.result?.request_id);
@@ -162,6 +169,39 @@ const SendMessage = () => {
 
           <h1>End Date of Donation:</h1>
           <DatePicker selected={enddate} onChange={(date) => setEndate(date)} className="bg-slate-400" />
+
+
+          
+          <label
+            htmlFor="location"
+            className="block mb-2 text-sm font-lg font-bold"
+          >
+            Location of Donation:
+          </label>
+          <input
+            type="text"
+            id="location"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 "
+            placeholder="KMC Hospital"
+            onChange={(e) => setLocation(e.target.value)}
+            required
+          ></input>
+
+                    
+          <label
+            htmlFor="locationUrl"
+            className="block mb-2 text-sm font-lg font-bold"
+          >
+            Google Maps Link:
+          </label>
+          <input
+            type="text"
+            id="location"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 "
+            placeholder="https://maps.app.goo.gl/gJchueVcYryLveSz9"
+            onChange={(e) => setlocUrl(e.target.value)}
+            required
+          ></input>
 
           <div>
             <FormControl>

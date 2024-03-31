@@ -10,7 +10,7 @@ const verifyJWT = (req, res, next) => {
         process.env.ACCESS_TOKEN_SECRET,
         (err, decoded) => {
             if (err){
-                res.status(403).json({ auth: false, message: "Failed to authorize" });  //invalid token - forbidden
+                res.status(403).json({ auth: false, message: "Failed to authorize" });
             }else{
                 req.user = decoded.username;
                 next();

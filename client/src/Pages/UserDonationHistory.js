@@ -1,12 +1,9 @@
-
 import React from 'react'
-import UserTabs from '../Components/UserTabs'
 import { useState, useEffect } from 'react';
 import axios from '../axios';
-
-import cert_img from "../Images/certificate.png"
-
+import ArrowCircleLeftRoundedIcon from '@mui/icons-material/ArrowCircleLeftRounded';
 import { useAuth } from "../Hooks/useAuth";
+import { Link } from 'react-router-dom';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import PDFFile from '../Components/PDFFile.js';
 
@@ -19,32 +16,31 @@ const UserDonationHistory = () => {
     useEffect(() => {
         async function fetchData() {
           axios
-            .get(`http://localhost:3031/user/getAllDonationsofUser/${userID}`, {
+            .get(`/user/getAllDonationsofUser/${userID}`, {
               headers: {
                 Authorization: `Bearer ${auth?.auth?.token}`,
               },
             })
             .then((response) => {
-              console.log("got all donation history of the user");
-              console.log(response.data);
-              // const data = await response.json();
               setDonations(response.data);
-              console.log(donations);
             })
             .catch((error) => {
               console.error("Error fetching donation data:", error);
             });
         }
         fetchData();
-      }, []); // Only run this effect when user_id changes
+      }, []);
 
   return (
-    <div className='h-screen'>
-    <UserTabs/>
-    <div className='bg-[#F2EEDB] flex flex-col items-center justify-center px-6 py-8 mx-auto'>
+    <div>
+    <Link to='/dashboard' className='text-xl ml-20'>
+    <ArrowCircleLeftRoundedIcon className='mr-2'/>
+      Dashboard</Link>
+    <div className='flex flex-col items-center justify-center mx-auto px-2 py-2 lg:px-6 lg:py-6'>
         <h1 className="font-bold text-4xl">My Donations</h1>
-        <div className="w-full mt-5 p-5 bg-[#E3DEC6] rounded-lg shadow h-full">
+        <div className="w-full mt-5 rounded-lg shadow h-screen lg:p-5">
             <TableHeader/>
+
             {donations.map((donation, index) => (
                       <TableRow key={index} donation={donation} />
             ))}
@@ -57,10 +53,10 @@ const UserDonationHistory = () => {
 const TableHeader = () => {
     return (
       <div>
-        <div className="grid grid-cols-4 gap-4 font-semibold text-lg pt-5 pb-5">
-          <div>Donation Date</div>
-          <div>Amount Donated(ml)</div>
-          <div>Donation Type</div>
+        <div className="grid grid-cols-4 gap-2 font-semibold text-lg pt-5 pb-5 pl-2">
+          <div>Date</div>
+          <div>Amt. (ml)</div>
+          <div>Type</div>
           <div>Certificate</div>
         </div>
       </div>
