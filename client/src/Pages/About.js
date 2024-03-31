@@ -1,7 +1,8 @@
 import React from "react";
 import jay_img from "../Images/jay_img.png"
 import athul_img from "../Images/athul_pic.jpg"
-import sid_img from "../Images/sid_pic.jpg" 
+import sid_img from "../Images/sid_pic.jpg"
+import naamya_img from "../Images/Namya_pic.png" 
 
 const About = () => {
   return (
@@ -37,7 +38,7 @@ const About = () => {
                   <div className='font-bold text-xl'>Sidhant Sharma</div>
             </div>
             <div className="flex flex-col justify-center items-center">
-                  <img src={jay_img} className="rounded-full w-[300px] h-[250px] lg:w-[300px] lg:h-[200px] block"></img>
+                  <img src={naamya_img} className="rounded-full w-[300px] h-[250px] lg:w-[300px] lg:h-[200px] block"></img>
                   <div className='font-bold text-xl'>Naamya Patiyal</div>
             </div>
         </div>

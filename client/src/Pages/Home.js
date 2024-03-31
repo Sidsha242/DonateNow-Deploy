@@ -12,9 +12,7 @@ const Home = () => {
             Help Save Lives
           </div>
           <p className="mb-10">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s,
+            Welcome to our blood donation website where every drop couts towards saving lives. Join our community of heroes by registering to donate blood and help bridge the gap between patients in need and life-saving blood supplies
           </p>
           <Link
             to="/feed"

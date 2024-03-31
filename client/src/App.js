@@ -1,4 +1,3 @@
-require('dotenv').config();
 import {BrowserRouter , Routes, Route} from 'react-router-dom';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
@@ -24,8 +23,8 @@ import Donate from './Pages/Donate';
 
 
 const ROLES = {
-    'User' : process.env.USER_ROLE ,
-    'Admin' : process.env.ADMIN_ROLE,
+    'User' : 2001 ,
+    'Admin' : 1984 ,
 }
 
 
