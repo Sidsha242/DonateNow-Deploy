@@ -6,7 +6,7 @@ const AdminLayout = () => {
   return (
     <>
       <AdminNavbar></AdminNavbar>
-      <main className="App">
+      <main className="App bg-slate-100 font-cust1">
         <Outlet />
       </main>
     </>

@@ -1,5 +1,5 @@
 import React from "react";
-import { axiosPrivate } from "../axios";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 import { useAuth } from "../hooks/useAuth";
 
@@ -8,11 +8,12 @@ import QRCode from "react-qr-code";
 
 const DonateRequestInfo = (props) => {
   const auth = useAuth();
+  const axiosPrivate = useAxiosPrivate();
   useEffect(() => {
     axiosPrivate
       .get(`/user/getRequestDetails/${props.reqId}`, {
         headers: {
-          Authorization: `Bearer ${auth?.auth?.accessToken}`,
+          Authorization: `Bearer ${auth?.auth?.token}`,
         },
       })
       .then((response) => {
@@ -28,16 +29,17 @@ const DonateRequestInfo = (props) => {
 
   return (
     <div className="flex flex-col space-y-10">
-      <div className="rounded-md p-2 grid grid-cols-2 lg:px-80">
+      <div className="rounded-2xl p-2 grid grid-cols-2 lg:px-80 bg-slate-200">
         <div>
-          <p className="underline">Donation Details:</p>
           <p className="font-bold">Request id:&nbsp;{props.reqId}</p>
           <p className="font-bold">
             Status: {requestData?.isDone ? "Completed" : "Active"}
           </p>
-          <p className="font-bold">
-            Blood Group: {requestData?.bldGrpRequired}
-          </p>
+          {requestData?.emergencyLevel === "donation" && (
+            <p className="font-bold">
+              Blood Group: {requestData?.bldGrpRequired}
+            </p>
+          )}
           <p className="font-bold">Location: {requestData?.location}</p>
         </div>
         <div className="flex justify-center items-center">

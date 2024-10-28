@@ -88,7 +88,7 @@ const userSignIn = async (req, res) => {
           } else {
             res.json({
               auth: false,
-              message: "wrong username/password combination",
+              message: "Wrong username/password combination",
             });
           }
         }

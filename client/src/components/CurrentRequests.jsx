@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import axiosPrivate from "../axios";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import toast from "react-hot-toast";
 import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
@@ -11,12 +11,13 @@ const CurrentRequests = () => {
   const [requests, setRequests] = useState([]);
 
   const auth = useAuth();
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     axiosPrivate
       .get(`/user/getRequests`, {
         headers: {
-          Authorization: `Bearer ${auth?.auth?.accessToken}`,
+          Authorization: `Bearer ${auth?.auth?.token}`,
         },
       })
       .then((response) => {
@@ -31,7 +32,7 @@ const CurrentRequests = () => {
     axiosPrivate
       .delete(`/user/delReq/${reqId}`, {
         headers: {
-          Authorization: `Bearer ${auth?.auth?.accessToken}`,
+          Authorization: `Bearer ${auth?.auth?.token}`,
         },
       })
       .then((response) => {
@@ -53,13 +54,18 @@ const CurrentRequests = () => {
         <p className="w-20">Bld Group Reqd.</p>
         <p className="w-20">Amt Reqd.</p>
         <p className="w-20">Interested Donors</p>
+        <p className="w-20">Type</p>
       </div>
       {requests.map((requests, index) => (
-        <div className="flex flex-row space-x-16 p-5 bg-red-100 mt-2">
+        <div
+          className="flex flex-row space-x-16 p-5 bg-red-100 mt-2"
+          key={index}
+        >
           <p className="w-20">{requests?.request_id}</p>
           <p className="w-20">{requests?.bldGrpRequired}</p>
           <p className="w-20">{requests?.amount_Required}</p>
           <p className="w-20">{requests?.noOfInterestedDonors}</p>
+          <p className="w-20">{requests?.emergencyLevel}</p>
           <Link to={`/admin/editreq/${requests?.request_id}`}>
             <EditIcon />
           </Link>

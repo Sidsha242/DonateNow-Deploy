@@ -1,11 +1,11 @@
 import React from "react";
 import SearchBar from "../../components/SearchBar";
 import { useState, useEffect } from "react";
-import { axiosPrivate } from "../../axios";
 import dateFormat from "dateformat";
 
 import toast from "react-hot-toast";
 import { useAuth } from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const AddDonation = () => {
   const [exp_arr, set_exp_arr] = useState([]);
@@ -15,12 +15,13 @@ const AddDonation = () => {
   const [amountOfBlood, setAmountOfBlood] = useState("");
 
   const auth = useAuth();
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     axiosPrivate
       .get("/admin/adminget", {
         headers: {
-          Authorization: `Bearer ${auth?.auth?.accessToken}`,
+          Authorization: `Bearer ${auth?.auth?.token}`,
         },
       })
       .then((response) => {
@@ -35,7 +36,7 @@ const AddDonation = () => {
     axiosPrivate
       .get("/admin/requestinfo", {
         headers: {
-          Authorization: `Bearer ${auth?.auth?.accessToken}`,
+          Authorization: `Bearer ${auth?.auth?.token}`,
         },
       })
       .then((response) => {
@@ -57,7 +58,7 @@ const AddDonation = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${auth?.auth?.accessToken}`,
+            Authorization: `Bearer ${auth?.auth?.token}`,
           },
         }
       )
@@ -83,7 +84,7 @@ const AddDonation = () => {
       <div className="bg-gray-300 h-fill">
         <div className="grid grid-cols-5 font-bold text-sm pl-2 pt-6 pb-6">
           <div>{props?.donor_id}</div>
-          <div>{props?.username}</div>
+          <div>{props?.firstName}</div>
           <div>{props?.bloodgrp}</div>
           <div>{props?.phonenum}</div>
           <div>
@@ -129,9 +130,9 @@ const AddDonation = () => {
   }
 
   return (
-    <div className="h-full p-3 mr-5">
-      <div className="grid grid-cols-2">
-        <div>
+    <div className="h-full pt-10 pl-3">
+      <div className="flex flex-row w-full space-x-16">
+        <div className="flex-auto">
           <div>
             <h1 className="text-2xl font-bold">Add Donation Details</h1>
             <SearchBar setFilter={setFilter} />
@@ -139,7 +140,7 @@ const AddDonation = () => {
               {displayedData.map((id) => (
                 <AdminCard
                   key={id._id}
-                  username={id?.username}
+                  firstName={id?.firstName}
                   donor_id={id?.donor_id}
                   createdAt={id?.createdAt}
                   bloodgrp={id?.bldgrp}
@@ -164,7 +165,7 @@ const AddDonation = () => {
           </div>
         </div>
 
-        <div className="p-5">
+        <div className="pt-5 pl-2 pb-2 pr-20 border-2 border-blue-600 rounded-md h-fit">
           <h1 className="font-bold text-lg">Selected user: {obj?.username}</h1>
           <h1 className="font-bold text-lg">Donor ID: {obj?.donor_id}</h1>
           <h1 className="font-bold text-lg">
@@ -175,7 +176,7 @@ const AddDonation = () => {
           <input
             type="number"
             id="default-input"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            className="input-red w-1/2"
             onChange={(e) => setAmountOfBlood(e.target.value)}
           ></input>
           <button

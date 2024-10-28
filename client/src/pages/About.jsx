@@ -24,7 +24,7 @@ const About = () => {
         <div className="font-bold text-2xl text-[#3C3C3C] text-center mt-20 mb-16 lg:mb-10">
           Our Team
         </div>
-        <div className="flex flex-col space-y-10 p-8 lg:flex-row lg:space-x-28 mb-10">
+        <div className="flex flex-col space-y-10 p-8 lg:flex-row lg:space-x-28 mb-10 lg:px-36">
           <div className="flex flex-col justify-center items-center">
             <img
               src={jay_img}

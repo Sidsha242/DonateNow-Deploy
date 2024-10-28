@@ -4,7 +4,6 @@ const nanoid = require("nanoid");
 const DonationHistorySchema = mongoose.Schema({
   donation_id: {
     type: String,
-    default: nanoid(6),
     required: true,
     unique: true,
   },

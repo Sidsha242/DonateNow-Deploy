@@ -1,9 +1,9 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axiosPrivate from "../../axios";
 import toast from "react-hot-toast";
 import { useAuth } from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import DashProfile from "../../components/DashProfile";
 
 const AddDonationQr = () => {
@@ -16,12 +16,13 @@ const AddDonationQr = () => {
   const [requestData, setRequestData] = useState("");
 
   const auth = useAuth();
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     axiosPrivate
       .get(`/user/getDetailsOfUser/${userid}`, {
         headers: {
-          Authorization: `Bearer ${auth?.auth?.accessToken}`,
+          Authorization: `Bearer ${auth?.auth?.token}`,
         },
       })
       .then((response) => {
@@ -35,7 +36,7 @@ const AddDonationQr = () => {
     axiosPrivate
       .get(`/user/getRequestDetails/${reqid}`, {
         headers: {
-          Authorization: `Bearer ${auth?.auth?.accessToken}`,
+          Authorization: `Bearer ${auth?.auth?.token}`,
         },
       })
       .then((response) => {
@@ -59,7 +60,7 @@ const AddDonationQr = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${auth?.auth?.accessToken}`,
+            Authorization: `Bearer ${auth?.auth?.token}`,
           },
         }
       )

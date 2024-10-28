@@ -2,10 +2,14 @@ import React from "react";
 import app from "../firebase";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import userImg from "../images/preview.png";
-import axios from "../axios";
 import { useState } from "react";
+import useAuth from "../hooks/useAuth";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const DashTitle = (props) => {
+  const auth = useAuth();
+  const axiosPrivate = useAxiosPrivate();
+
   const [uploading, setUploading] = useState(false);
   const [imageURL, setImageURL] = useState(props.userImage);
 
@@ -31,11 +35,19 @@ const DashTitle = (props) => {
   const upload = (downloadURL) => {
     //console.log(uploading);
     //console.log(downloadURL);
-    axios
-      .post("/user/uploadImage", {
-        user_id: props.user_id,
-        image: downloadURL,
-      })
+    axiosPrivate
+      .post(
+        "/user/uploadImage",
+        {
+          user_id: props.user_id,
+          image: downloadURL,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${auth?.auth?.token}`,
+          },
+        }
+      )
       .then((response) => {
         //console.log(response);
       })

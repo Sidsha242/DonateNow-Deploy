@@ -5,6 +5,8 @@ const DonationHistory = require("../models/donationHistoryModel");
 const Request = require("../models/requestModel");
 //const InterestedDonor = require("../models/interestedDonorModel");
 
+const nanoid = require("nanoid");
+
 const db = mongoose.connection;
 
 const getAllUsersEntirely = async (req, res) => {
@@ -146,7 +148,11 @@ const addDonationHistory = async (req, res) => {
     //   }
     // }
 
+    const donation_id = nanoid(6);
+    console.log(donation_id);
+
     const newDonation = new DonationHistory({
+      donation_id,
       donor_id,
       request_id,
       amount_Donated,
@@ -198,11 +204,16 @@ const addRequests = async (req, res) => {
       endTime,
       donationType,
       emergencyLevel,
+      title,
       location,
       locUrl,
     } = req.body;
 
+    const request_id = nanoid(6);
+    console.log(request_id);
+
     const newRequest = new Request({
+      request_id,
       bldGrpRequired,
       amount_Required,
       amount_Remaining,
@@ -210,6 +221,7 @@ const addRequests = async (req, res) => {
       endTime,
       donationType,
       emergencyLevel,
+      title,
       location,
       locUrl,
     });

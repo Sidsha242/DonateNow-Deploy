@@ -6,6 +6,7 @@ const DashRegen = (props) => {
   const totalDays = 58;
 
   const userRegen = () => {
+    //console.log(props.lastDonationDate);
     if (props.lastDonationDate == null) {
       return 0;
     }
@@ -17,12 +18,13 @@ const DashRegen = (props) => {
     const differenceInDays = Math.floor(
       differenceInTime / (1000 * 60 * 60 * 24)
     );
+    //console.log(totalDays - differenceInDays);
     return totalDays - differenceInDays;
   };
 
   return (
     <div>
-      <div className="rounded-md bg-white pl-2 gap-4 grid grid-cols-2">
+      <div className="rounded-md bg-white p-2 flex flex-col space-y-4 lg:flex-row lg:space-x-8 items-center">
         <div className="pt-8">
           <div className="flex">
             <div className="text-red-500 text-3xl lg:text-4xl">
@@ -30,15 +32,22 @@ const DashRegen = (props) => {
             </div>
             <div className="text-red-500 text-3xl"></div>
           </div>
-          <div className="mt-5 border border-red-600 p-2 rounded-lg text-lg font-bold">
+          <div className="mt-5 border border-red-600 p-2 rounded-lg text-lg">
             {userRegen() <= 0 ? (
-              <p>You are eligible to donate!!</p>
+              <p className="font-bold">You are eligible to donate!!</p>
             ) : (
-              <p>Sorry you have to wait a bit longer!</p>
+              <div>
+                <p className="font-bold">
+                  Sorry you have to wait a bit longer!
+                </p>
+                <p className="text-red-600 text-sm">
+                  *Donate Now requires users to wait 58 days between donations*
+                </p>
+              </div>
             )}
           </div>
         </div>
-        <div className="mt-3 mb-3 w-3/4 h-3/4">
+        <div className="w-3/4 h-3/4  flex flex-col space-y-2 items-center justify-center">
           <CircularProgressbar
             value={((58 - userRegen()) / totalDays) * 100}
             maxValue={100}
@@ -49,8 +58,9 @@ const DashRegen = (props) => {
               backgroundColor: "#3e98c7",
             })}
           />
-          <h1 className="text-red-400 text-xl font-bold flex text-center">
-            Regeneration cycle : {((58 - userRegen()) / totalDays) * 100} %
+          <h1 className="text-red-400 text-xl font-bold">
+            Regeneration cycle :{" "}
+            {Math.round(((58 - userRegen()) / totalDays) * 100)} %
           </h1>
         </div>
       </div>

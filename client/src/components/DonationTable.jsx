@@ -1,19 +1,19 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import axiosPrivate from "../axios";
-import { Link } from "react-router-dom";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 import { useAuth } from "../hooks/useAuth";
 
 const DonationTable = (props) => {
   const [donations, setDonations] = useState([]);
   const auth = useAuth();
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     axiosPrivate
       .get(`/user/getAllDonationsofUser/${props.user_id}`, {
         headers: {
-          Authorization: `Bearer ${auth?.auth?.accessToken}`,
+          Authorization: `Bearer ${auth?.auth?.token}`,
         },
       })
       .then((response) => {
@@ -30,18 +30,11 @@ const DonationTable = (props) => {
       <TableHeader />
       {donations.length === 1 && <TableRow props={donations[0]}></TableRow>}
       {donations.length > 1 &&
-        donations.map((donation) => {
-          return <TableRow props={donation}></TableRow>;
+        donations.map((donation, index) => {
+          return <TableRow props={donation} key={index}></TableRow>;
         })}
       {donations.length === 0 && (
         <div className="text-center font-light text-md">No donations yet</div>
-      )}
-      {donations.length > 3 ? (
-        <Link className="bg-gray-200 p-2 rounded-md text-lg" to="/donhistory">
-          See more
-        </Link>
-      ) : (
-        <p> </p>
       )}
     </div>
   );
@@ -54,7 +47,7 @@ const TableHeader = () => {
     <div>
       <div className="grid grid-cols-3 font-bold text-lg pt-2 pb-3">
         <div>Date</div>
-        <div>Amount Donated</div>
+        <div>Units Donated</div>
         <div>Donation Id</div>
       </div>
     </div>

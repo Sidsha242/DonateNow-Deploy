@@ -1,9 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 import blood_bag from "../images/blood_bag.svg";
-import { axiosPrivate } from "../axios";
 
 import Loading from "../components/Loading";
 import DashTitle from "../components/DashTitle";
@@ -13,16 +13,18 @@ import DashRegen from "../components/DashRegen";
 
 const Dashboard = () => {
   const auth = useAuth();
+  const axiosPrivate = useAxiosPrivate();
   const userID = auth?.auth?.donor_id;
   const [loading, setLoading] = useState(true);
 
   const [userData, setUserData] = useState("");
 
   useEffect(() => {
+    //console.log(auth);
     axiosPrivate
       .get(`/user/getDetailsOfUser/${userID}`, {
         headers: {
-          Authorization: `Bearer ${auth?.auth?.accessToken}`,
+          Authorization: `Bearer ${auth?.auth?.token}`,
         },
       })
       .then((response) => {
@@ -45,7 +47,7 @@ const Dashboard = () => {
         user_id={userData?.donor_id}
         firstName={userData?.firstName}
       />
-      <div className="bg-red-100 pt-4 pb-10 mb-10 font-pop px-1 py-2 lg:p-10 lg:mt-10 space-y-4 lg:mx-28 rounded-lg">
+      <div className="bg-red-100 pt-4 pb-10 font-pop px-1 py-2 lg:p-10 lg:mt-10 space-y-4 lg:mx-28 rounded-lg">
         <div className="text-red-600 flex flex-row space-x-3">
           <div className="bg-white rounded-md p-3 flex flex-col space-y-10">
             <div className="font-bold text-3xl">Blood Group: </div>
@@ -68,7 +70,7 @@ const Dashboard = () => {
         </div>
 
         <div className="flex flex-col lg:grid lg:grid-cols-2 lg:gap-3 mt-2 space-y-3 lg:space-y-0">
-          <DashRegen lastDonatationDate={userData?.lastDonationDate} />
+          <DashRegen lastDonationDate={userData?.lastDonationDate} />
 
           <DonationTable user_id={userData?.donor_id} />
         </div>

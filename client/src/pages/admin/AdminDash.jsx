@@ -1,11 +1,12 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
-import { axiosPrivate } from "../../axios";
 import dateFormat from "dateformat";
 import CurrentRequests from "../../components/CurrentRequests";
 import toast from "react-hot-toast";
+
 import { useAuth } from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const AdminDash = () => {
   const [exp_arr, set_exp_arr] = useState([]);
@@ -13,12 +14,13 @@ const AdminDash = () => {
   //const palette = ["red", "green", "blue", "yellow", "orange", "purple"];
 
   const auth = useAuth();
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     axiosPrivate
       .get("/admin/admininfo", {
         headers: {
-          Authorization: `Bearer ${auth?.auth?.accessToken}`,
+          Authorization: `Bearer ${auth?.auth?.token}`,
         },
       })
       .then((response) => {
@@ -78,7 +80,7 @@ const AdminDash = () => {
           />
           <h1 className="font-bold text-2xl mt-10">Users:</h1>
           <div className="ml-2 pt-10 pb-20 overflow-scroll">
-            {exp_arr.map((id) => (
+            {exp_arr.map((id, index) => (
               <AdminCard
                 state={id}
                 donor_id={id?.donor_id}
@@ -87,6 +89,7 @@ const AdminDash = () => {
                 createdAt={id?.createdAt}
                 bloodgrp={id?.bldgrp}
                 phonenum={id?.phonenum}
+                key={index}
               />
             ))}
           </div>
@@ -102,12 +105,13 @@ export default AdminDash;
 
 const AdminCard = (props) => {
   const auth = useAuth();
+  const axiosPrivate = useAxiosPrivate();
 
   const deleteUser = (userId) => {
     axiosPrivate
       .delete(`/user/delUser/${userId}`, {
         headers: {
-          Authorization: `Bearer ${auth?.auth?.accessToken}`,
+          Authorization: `Bearer ${auth?.auth?.token}`,
         },
       })
       .then((response) => {

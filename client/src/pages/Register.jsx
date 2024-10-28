@@ -117,7 +117,7 @@ const Register = () => {
     if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
       age--;
     }
-    if (age >= 18) {
+    if (age >= 18 && age <= 65) {
       setIsCorrectAge(true);
     } else {
       setIsCorrectAge(false);

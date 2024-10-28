@@ -4,7 +4,6 @@ import useRefreshToken from "./useRefreshToken";
 import useAuth from "./useAuth";
 
 const useAxiosPrivate = () => {
-  //authenticated API requests
   const refresh = useRefreshToken();
   const { auth } = useAuth();
 
@@ -12,8 +11,7 @@ const useAxiosPrivate = () => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
       (config) => {
         if (!config.headers["Authorization"]) {
-          //Checks if the Authorization header is already set. If not, it adds it.
-          config.headers["Authorization"] = `Bearer ${auth?.accessToken}`; //Adds the access token from the auth context to the request header.
+          config.headers["Authorization"] = `Bearer ${auth?.accessToken}`;
         }
         return config;
       },
@@ -33,7 +31,6 @@ const useAxiosPrivate = () => {
         return Promise.reject(error);
       }
     );
-
     return () => {
       axiosPrivate.interceptors.request.eject(requestIntercept);
       axiosPrivate.interceptors.response.eject(responseIntercept);

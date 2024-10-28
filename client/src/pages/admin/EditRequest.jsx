@@ -9,11 +9,10 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { InputLabel } from "@mui/material";
 import { useParams } from "react-router-dom";
-import axiosPrivate from "../../axios";
-
 import toast from "react-hot-toast";
 
 import { useAuth } from "../../hooks/useAuth";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const EditRequest = () => {
   const routeParams = useParams();
@@ -27,9 +26,11 @@ const EditRequest = () => {
   const [amountOfBlood, setAmountOfBlood] = useState("");
   const [location, setLocation] = useState("");
   const [locUrl, setlocUrl] = useState("");
+  const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
 
   const auth = useAuth();
+  const axiosPrivate = useAxiosPrivate();
 
   const editRequest = () => {
     axiosPrivate
@@ -44,12 +45,13 @@ const EditRequest = () => {
           endTime: endTime,
           location: location,
           locUrl: locUrl,
+          title: title,
           donationType: donationType,
           emergencyLevel: emergencyLevel,
         },
         {
           headers: {
-            Authorization: `Bearer ${auth?.auth?.accessToken}`,
+            Authorization: `Bearer ${auth?.auth?.token}`,
           },
         }
       )
@@ -75,6 +77,36 @@ const EditRequest = () => {
       <p>Request Id: {request_id}</p>
 
       <form onSubmit={handleSubmit} className="space-y-4 ">
+        <div className="mt-5 text-xl font-bold">
+          <FormControl>
+            <FormLabel id="demo-radio-buttons-group-label">
+              Type of Request
+            </FormLabel>
+            <RadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue="Donation"
+              name="radio-buttons-group"
+              onChange={(e) => setEmergencyLevel(e.target.value)}
+            >
+              <FormControlLabel
+                value="donation"
+                control={<Radio />}
+                label="Donation"
+              />
+              <FormControlLabel
+                value="drive"
+                control={<Radio />}
+                label="Drive"
+              />
+              <FormControlLabel
+                value="casualty"
+                control={<Radio />}
+                label="Mass Casualty"
+              />
+            </RadioGroup>
+          </FormControl>
+        </div>
+
         <label
           htmlFor="blood-group"
           className="block mb-3 items-start font-bold mt-2"
@@ -105,7 +137,7 @@ const EditRequest = () => {
           htmlFor="bldAmount"
           className="block mb-2 text-sm font-lg font-bold"
         >
-          Amount of blood to be donated:(in ml)
+          Amount of blood to be donated:
         </label>
         <input
           type="number"
@@ -158,6 +190,17 @@ const EditRequest = () => {
           onChange={(e) => setlocUrl(e.target.value)}
         ></input>
 
+        <label htmlFor="title" className="block mb-2 text-lg font-lg font-bold">
+          Title for Drive (Only for drives - Not for donations):
+        </label>
+        <input
+          type="text"
+          id="title"
+          className="input-red w-3/4"
+          placeholder="Title"
+          onChange={(e) => setTitle(e.target.value)}
+        ></input>
+
         <div>
           <FormControl>
             <FormLabel id="demo-radio-buttons-group-label">
@@ -183,35 +226,6 @@ const EditRequest = () => {
                 value="Granulocytes"
                 control={<Radio />}
                 label="Granulocytes"
-              />
-            </RadioGroup>
-          </FormControl>
-        </div>
-        <div className="mt-5">
-          <FormControl>
-            <FormLabel id="demo-radio-buttons-group-label">
-              Emergency Level
-            </FormLabel>
-            <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue="Normal_Drive"
-              name="radio-buttons-group"
-              onChange={(e) => setEmergencyLevel(e.target.value)}
-            >
-              <FormControlLabel
-                value="Mass_Casualty"
-                control={<Radio />}
-                label="Mass_Casualty"
-              />
-              <FormControlLabel
-                value="Immediate"
-                control={<Radio />}
-                label="Immediate"
-              />
-              <FormControlLabel
-                value="Normal_Drive"
-                control={<Radio />}
-                label="Normal_Drive"
               />
             </RadioGroup>
           </FormControl>

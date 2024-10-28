@@ -13,7 +13,7 @@ const useRefreshToken = () => {
         ...prev,
         donor_id: response.data.donor_id,
         role: response.data.role,
-        accessToken: response.data.accessToken, ///token?
+        token: response.data.accessToken, ///token?
       };
     });
     return response.data.accessToken; //Returns the new access token, so it can be used directly by the component or service that calls the refresh function.
