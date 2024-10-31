@@ -10,6 +10,4 @@ RUN npm ci
 #copying everything except nodemodules in image
 COPY . .
 
-# EXEC FORM
-
-CMD [ "npm" , "start" ]
+CMD ["npm", "start"]

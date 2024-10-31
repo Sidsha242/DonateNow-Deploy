@@ -13,8 +13,10 @@ services:
       context: ./client
       dockerfile: Dockerfile
     restart: unless-stopped
+    env_file:
+      - ./client/.env
     volumes:
-      - ./client:/app
+      - ./client:/
       - /app/node_modules
     networks:
       - mern-app
@@ -24,8 +26,8 @@ services:
   caddy:
     image: caddy:2-alpine
     ports:
-      - 80:80
-      - 443:443
+      - "80:80"
+      - "443:443"
     volumes:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
@@ -39,6 +41,7 @@ services:
 volumes:
   caddy_data:
   caddy_config:
+
 networks:
   mern-app:
     driver: bridge
