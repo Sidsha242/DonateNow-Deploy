@@ -16,8 +16,8 @@ services:
     env_file:
       - ./client/.env
     volumes:
-      - ./client:/
-      - /app/node_modules
+      - ./client/build:/app/build
+    #- /app/node_modules
     networks:
       - mern-app
     depends_on:
