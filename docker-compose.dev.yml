@@ -2,7 +2,7 @@ services:
   api:
     build:
       context: ./server
-
+      dockerfile: Dockerfile
     restart: unless-stopped
     env_file: ./server/.env
     networks:
@@ -11,8 +11,7 @@ services:
   frontend:
     build:
       context: ./client
-      args:
-        REACT_APP_API_URL: https://api.${DOMAIN_NAME}
+      dockerfile: Dockerfile
     restart: unless-stopped
     env_file:
       - ./client/.env
@@ -25,15 +24,12 @@ services:
       - api
 
   caddy:
-    build:
-      context: ./caddy
-      dockerfile: Dockerfile
+    image: caddy:2-alpine
     ports:
       - "80:80"
       - "443:443"
-    environment:
-      DOMAIN_NAME: ${DOMAIN_NAME}
     volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
     networks:
